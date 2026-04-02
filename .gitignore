@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Database files (local data, don't commit)
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+.get-to-it.db*
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+.venv/
+
+# Temp / build artifacts
+zi93idzC
+zisGPub5
+*.tmp
+*.log
+
+# Editor
+.vscode/
+.idea/

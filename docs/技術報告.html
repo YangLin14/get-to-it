@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get To It — 完整技術報告 V2</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f14;
+    --bg2: #111318;
+    --bg3: #161a22;
+    --border: #1f2937;
+    --border2: #2a3441;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #4b5563;
+    --purple: #a78bfa;
+    --blue: #60a5fa;
+    --green: #34d399;
+    --amber: #fbbf24;
+    --rose: #fb7185;
+    --cyan: #22d3ee;
+    --orange: #fb923c;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', sans-serif;
+    line-height: 1.75;
+    font-size: 14.5px;
+  }
+
+  /* ── Nav ── */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,15,20,0.94); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 40px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo { font-size: 0.95rem; font-weight: 800;
+    background: linear-gradient(135deg,var(--purple),var(--blue),var(--green));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .nav-links { display: flex; gap: 20px; list-style: none; }
+  .nav-links a { color: var(--text2); text-decoration: none; font-size: 0.78rem; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── Layout ── */
+  .container { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* ── Hero ── */
+  .hero { text-align: center; padding: 56px 0 40px; }
+  .hero-badge { display: inline-block; background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.3);
+    border-radius: 20px; padding: 5px 16px; font-size: 0.72rem; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--purple); margin-bottom: 20px; }
+  .hero h1 { font-size: 2.6rem; font-weight: 800; letter-spacing: -1px;
+    background: linear-gradient(135deg,var(--purple),var(--blue),var(--green));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-sub { margin-top: 12px; color: var(--text2); font-size: 0.9rem; }
+
+  /* ── Stats row ── */
+  .stats { display: flex; gap: 12px; justify-content: center; margin: 28px 0; flex-wrap: wrap; }
+  .stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 22px; text-align: center; }
+  .stat-n { font-size: 1.6rem; font-weight: 800; background: linear-gradient(135deg,var(--green),var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .stat-l { font-size: 0.68rem; color: var(--text3); margin-top: 2px; letter-spacing: 0.5px; }
+
+  /* ── Divider ── */
+  .divider { height: 1px; background: linear-gradient(to right,transparent,var(--border),transparent); margin: 40px 0; }
+
+  /* ── Phase header ── */
+  .phase { margin-bottom: 32px; }
+  .phase-label { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .phase-badge { border-radius: 8px; padding: 4px 12px; font-size: 0.68rem; font-weight: 800;
+    letter-spacing: 1.5px; text-transform: uppercase; }
+  .pb-mvp { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3); color: var(--green); }
+  .pb-p1  { background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.3); color: var(--blue); }
+  .pb-p2  { background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.3); color: var(--purple); }
+  .pb-p3  { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.3); color: var(--amber); }
+  .phase-title { font-size: 1.25rem; font-weight: 700; color: var(--text); }
+  .phase-desc { color: var(--text2); font-size: 0.88rem; margin-bottom: 20px; }
+
+  /* ── Feature cards ── */
+  .feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  .feat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+  .feat-card.full { grid-column: 1 / -1; }
+  .feat-icon { font-size: 1.2rem; margin-bottom: 6px; }
+  .feat-title { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .feat-body { font-size: 0.78rem; color: var(--text2); line-height: 1.7; }
+  .feat-body strong { color: var(--text); }
+
+  /* ── Code block ── */
+  .code { background: #080a0e; border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 18px; font-family: 'JetBrains Mono','SF Mono','Fira Code',monospace;
+    font-size: 0.74rem; color: #a9b1d6; line-height: 1.8; overflow-x: auto; margin: 12px 0; }
+  .code .kw { color: var(--purple); }
+  .code .fn { color: var(--blue); }
+  .code .cm { color: var(--text3); }
+  .code .st { color: var(--green); }
+  .code .nu { color: var(--amber); }
+
+  /* ── DB schema table ── */
+  .schema-table { width: 100%; border-collapse: collapse; font-size: 0.74rem; margin: 12px 0; }
+  .schema-table th { background: var(--bg3); color: var(--text3); font-weight: 600;
+    letter-spacing: 0.5px; padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border2); }
+  .schema-table td { padding: 7px 12px; border-bottom: 1px solid var(--border); color: var(--text2); }
+  .schema-table tr:last-child td { border-bottom: none; }
+  .schema-table .col-name { color: var(--cyan); font-family: monospace; }
+  .schema-table .col-type { color: var(--amber); font-family: monospace; }
+  .schema-table .col-desc { color: var(--text2); }
+
+  /* ── Tag chips ── */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tag { font-size: 0.67rem; padding: 2px 9px; border-radius: 12px; font-weight: 600; }
+  .tag-green { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); color: var(--green); }
+  .tag-blue  { background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.2); color: var(--blue); }
+  .tag-purple{ background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2); color: var(--purple); }
+  .tag-amber { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.2); color: var(--amber); }
+  .tag-cyan  { background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.2); color: var(--cyan); }
+  .tag-rose  { background: rgba(251,113,133,0.1); border: 1px solid rgba(251,113,133,0.2); color: var(--rose); }
+
+  /* ── Callout ── */
+  .callout { border-radius: 12px; padding: 16px 18px; margin: 14px 0; font-size: 0.82rem; }
+  .callout-green { background: rgba(52,211,153,0.05); border: 1px solid rgba(52,211,153,0.2); }
+  .callout-amber { background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.2); }
+  .callout-blue  { background: rgba(96,165,250,0.05); border: 1px solid rgba(96,165,250,0.2); }
+  .callout-purple{ background: rgba(167,139,250,0.05); border: 1px solid rgba(167,139,250,0.2); }
+  .callout-rose  { background: rgba(251,113,133,0.05); border: 1px solid rgba(251,113,133,0.2); }
+  .callout strong { font-weight: 700; }
+
+  /* ── Section number ── */
+  .sn { display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; border-radius: 8px; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+  .sn-green  { background: rgba(52,211,153,0.1); color: var(--green); }
+  .sn-blue   { background: rgba(96,165,250,0.1); color: var(--blue); }
+  .sn-purple { background: rgba(167,139,250,0.1); color: var(--purple); }
+  .sn-amber  { background: rgba(251,191,36,0.1); color: var(--amber); }
+  .sn-rose   { background: rgba(251,113,133,0.1); color: var(--rose); }
+  .sn-cyan   { background: rgba(34,211,238,0.1); color: var(--cyan); }
+  .sn-orange { background: rgba(251,146,60,0.1); color: var(--orange); }
+
+  h2 { font-size: 1.1rem; font-weight: 700; }
+
+  /* ── Command list ── */
+  .cmd-list { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }
+  .cmd-item { display: flex; gap: 12px; align-items: baseline; padding: 6px 10px;
+    background: rgba(255,255,255,0.02); border-radius: 8px; }
+  .cmd-name { font-family: monospace; font-size: 0.75rem; color: var(--cyan); min-width: 220px; flex-shrink: 0; }
+  .cmd-desc { font-size: 0.74rem; color: var(--text2); }
+
+  /* ── Flow diagram ── */
+  .flow { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin: 12px 0; }
+  .flow-box { background: var(--bg3); border: 1px solid var(--border2); border-radius: 8px;
+    padding: 7px 14px; font-size: 0.74rem; color: var(--text); white-space: nowrap; }
+  .flow-arrow { color: var(--text3); padding: 0 6px; font-size: 0.85rem; }
+  .flow-box.green { border-color: rgba(52,211,153,0.3); color: var(--green); }
+  .flow-box.blue  { border-color: rgba(96,165,250,0.3); color: var(--blue); }
+  .flow-box.amber { border-color: rgba(251,191,36,0.3); color: var(--amber); }
+  .flow-box.purple{ border-color: rgba(167,139,250,0.3); color: var(--purple); }
+  .flow-box.cyan  { border-color: rgba(34,211,238,0.3); color: var(--cyan); }
+
+  /* ── Fix list ── */
+  .fix-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .fix-item { display: flex; gap: 10px; background: rgba(251,113,133,0.04);
+    border: 1px solid rgba(251,113,133,0.15); border-radius: 10px; padding: 10px 14px; }
+  .fix-badge { font-size: 0.65rem; font-weight: 800; background: rgba(251,113,133,0.15);
+    color: var(--rose); border-radius: 6px; padding: 2px 8px; white-space: nowrap; height: fit-content; margin-top: 2px; }
+  .fix-text { font-size: 0.78rem; color: var(--text2); line-height: 1.6; }
+  .fix-text strong { color: var(--text); }
+
+  /* ── Footer ── */
+  footer { text-align: center; padding: 40px 0; color: var(--text3); font-size: 0.75rem; border-top: 1px solid var(--border); margin-top: 60px; }
+
+  @media (max-width: 640px) {
+    .feat-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .stats { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">Get To It — 技術報告 ✦</div>
+  <ul class="nav-links">
+    <li><a href="#mvp">MVP</a></li>
+    <li><a href="#p1">P1 時間追蹤</a></li>
+    <li><a href="#p2">P2 記憶/Agent</a></li>
+    <li><a href="#p3">P3 ML/Telegram</a></li>
+    <li><a href="#bugs">除錯記錄</a></li>
+    <li><a href="#arch">架構總覽</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-badge">Technical Report · V2 Complete · 2026.04.01</div>
+  <h1>Get To It — 完整技術報告</h1>
+  <p class="hero-sub">從 MVP 到 V2 全部五個功能的完整實作紀錄，包含設計決策、程式碼架構、除錯日誌</p>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-n">2,429</div><div class="stat-l">gti.py 總行數</div></div>
+  <div class="stat"><div class="stat-n">54</div><div class="stat-l">CLI 指令總數</div></div>
+  <div class="stat"><div class="stat-n">19</div><div class="stat-l">SQLite 資料表</div></div>
+  <div class="stat"><div class="stat-n">5</div><div class="stat-l">V2 功能模組</div></div>
+  <div class="stat"><div class="stat-n">0</div><div class="stat-l">外部 AI 模型依賴</div></div>
+</div>
+
+<div class="callout callout-green">
+  <strong>架構核心原則</strong>：所有功能都以 <strong>純 Python + SQLite + numpy</strong> 實作，零外部 AI 模型依賴。向量搜尋用自製 TF-IDF 而非 sentence-transformers，確保離線可用、體積小、啟動快。
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════
+     SECTION 0 — 技術棧
+════════════════════════════════════════ -->
+<div class="phase" id="stack">
+  <div class="phase-label">
+    <span class="sn sn-cyan">⚙</span>
+    <h2>技術棧 &amp; 整體架構</h2>
+  </div>
+
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon">🗃️</div>
+      <div class="feat-title">持久層 — SQLite WAL Mode</div>
+      <div class="feat-body">
+        所有資料儲存在 <strong>~/.get-to-it.db</strong>，使用 WAL（Write-Ahead Logging）模式，支援並發讀取不阻塞寫入。<br><br>
+        Migration 使用冪等模式：所有新欄位以 <strong>try/except + ALTER TABLE</strong> 實作，`init` 可反覆執行不損壞現有資料。
+      </div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🐍</div>
+      <div class="feat-title">運行時 — Python 3 單檔架構</div>
+      <div class="feat-body">
+        整個系統是一個 <strong>2,429 行的單一 gti.py 腳本</strong>，無框架依賴。所有命令透過 argv 解析，輸出統一為 JSON（除 telegram 格式外）。<br><br>
+        <strong>可選依賴</strong>（啟動時 try/import，缺少時優雅降級）：numpy、icalendar、urllib
+      </div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📦</div>
+      <div class="feat-title">Cowork Skill 封裝</div>
+      <div class="feat-body">
+        <strong>SKILL.md</strong>（AI 行為規則）+ <strong>scripts/gti.py</strong>（CLI 工具）+ <strong>references/persona.md</strong> 打包成 .skill zip。<br><br>
+        Claude 讀取 SKILL.md 後決定何時呼叫 gti.py、如何解讀 JSON 輸出、以什麼語氣回應使用者。
+      </div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🔢</div>
+      <div class="feat-title">向量層 — 純 numpy TF-IDF</div>
+      <div class="feat-body">
+        <strong>不使用任何預訓練模型</strong>。自製字元 bigram/trigram + 詞彙 token TF-IDF，用 numpy 計算 cosine similarity。<br><br>
+        向量以 JSON 存入 SQLite long_term_memory 表。個人規模（&lt;1000 筆）的線性掃描速度足夠快，且天然支援中文（字元 n-gram 不需斷詞）。
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-amber">
+    <strong>為什麼不用 sentence-transformers？</strong> 初始嘗試時因磁碟空間不足（CUDA 套件約 350MB）失敗。改用純 numpy 方案後，在個人使用規模下效果同樣良好，且啟動時間從 3-5 秒降至毫秒級。
+  </div>
+</div>
+
+<div class="divider" id="mvp"></div>
+
+<!-- ══════════════════════════════════════
+     SECTION 1 — MVP
+════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-label">
+    <span class="phase-badge pb-mvp">MVP</span>
+    <h2>MVP — 核心架構 &amp; 基礎功能</h2>
+  </div>
+  <p class="phase-desc">建立系統骨架：資料模型、優先排序引擎、秘書人格層、CLI 入口</p>
+
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon">🎯</div>
+      <div class="feat-title">目標 → 專案 → 任務三層資料模型</div>
+      <div class="feat-body">
+        <strong>goals</strong>（目標）→ <strong>projects</strong>（專案）→ <strong>tasks</strong>（任務）三層樹狀結構。<br><br>
+        Task 有六種狀態機：<code>pending → in_progress → completed / skipped / paused / agent_processing → agent_failed</code><br><br>
+        支援 assignee: human | agent，為後續人機協作奠基。
+      </div>
+      <div class="tags"><span class="tag tag-green">3 層資料模型</span><span class="tag tag-blue">6 種狀態機</span></div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">⚖️</div>
+      <div class="feat-title">動態優先排序引擎</div>
+      <div class="feat-body">
+        Morning brief 評分六個維度，加權相加取 Top 3：<br><br>
+        <strong>截止日壓力</strong>（0-30）、<strong>目標優先度</strong>（0-20）、<strong>專案動量</strong>（0-15）、<strong>跳過懲罰</strong>（0-10）、<strong>時間配對</strong>（0-15）、<strong>進度接近度</strong>（0-10）<br><br>
+        V2 P3 起改用動態權重（ML 學習後取代硬碼值）。
+      </div>
+      <div class="tags"><span class="tag tag-green">6 因素加權</span><span class="tag tag-purple">ML 就緒設計</span></div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">🧠</div>
+      <div class="feat-title">短期記憶（14 天滾動）</div>
+      <div class="feat-body">
+        <strong>memories</strong> 表儲存跳過原因、情緒標記、上下文，14 天自動過期。<br><br>
+        用來影響秘書語氣（「今天頭痛，明天不施壓」）和優先排序（曾被跳過多次的任務降分）。
+      </div>
+      <div class="tags"><span class="tag tag-blue">14 天 TTL</span><span class="tag tag-amber">影響排序</span></div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">🤵‍♀️</div>
+      <div class="feat-title">秘書人格三段模式</div>
+      <div class="feat-body">
+        <strong>welcome</strong>（首次使用）、<strong>normal</strong>（今天有完成）、<strong>gentle_nudge</strong>（停滯 1-2 天）、<strong>firm_push</strong>（停滯 3+ 天）。<br><br>
+        Morning brief 回傳 persona_mode 欄位，由 Claude 的 SKILL.md 規則決定如何用對應語氣輸出。
+      </div>
+      <div class="tags"><span class="tag tag-rose">4 種語氣模式</span></div>
+    </div>
+
+    <div class="feat-card full">
+      <div class="feat-icon">💡</div>
+      <div class="feat-title">想法捕捉 + 評估引擎</div>
+      <div class="feat-body">
+        <code>capture</code> 指令接收任意文字，Claude 評估關聯度（0-100）、建議行動（immediate_task / idea_bank / defer_week / explore_later），存入 <strong>idea_bank</strong> 表。<br><br>
+        <code>promote-idea</code> 可升級為正式任務，整合進主線。<code>ideas --all</code> 列出全部想法庫供定期回顧。
+      </div>
+      <div class="tags"><span class="tag tag-cyan">想法分類</span><span class="tag tag-green">可升級為任務</span></div>
+    </div>
+  </div>
+
+  <div class="callout callout-blue">
+    <strong>MVP CLI 指令</strong>：init、morning、capture、add-goal、add-project、add-task、start、complete、skip、pause、resume、review、mood、status、ideas、promote-idea、memory、remember、log、today-hours、list-goals、list-projects
+  </div>
+</div>
+
+<div class="divider" id="p1"></div>
+
+<!-- ══════════════════════════════════════
+     SECTION 2 — V2 P1
+════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-label">
+    <span class="phase-badge pb-p1">V2 P1</span>
+    <h2>Priority 1 — 時間追蹤 &amp; 行事曆整合</h2>
+  </div>
+  <p class="phase-desc">讓系統知道「這件事你通常花多久」以及「今天行程表有什麼」</p>
+
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon">⏱️</div>
+      <div class="feat-title">任務計時追蹤</div>
+      <div class="feat-body">
+        <code>start TASK_ID</code> 記錄 <strong>started_at</strong>，<code>complete</code> 時自動計算 actual_minutes（或 --minutes N 手動覆蓋）。<br><br>
+        <strong>time_source</strong> 欄位記錄來源：auto（系統計時）或 manual（使用者手填），用於校準信度權重。
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">📐</div>
+      <div class="feat-title">EWMA 時間預測校準</div>
+      <div class="feat-body">
+        每次完成任務後計算 ratio = actual / estimated，以 <strong>EWMA（α=0.3）</strong> 更新 <strong>time_models</strong> 表的 rolling_ratio。<br><br>
+        <code>smart-estimate CATEGORY MINUTES</code> 根據歷史比值自動校準估時（例如：你在 coding 類通常低估 1.4 倍，系統幫你放大）。
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">📅</div>
+      <div class="feat-title">iCal 行事曆整合</div>
+      <div class="feat-body">
+        <code>connect-calendar NAME URL --type ical_url|ical_file</code> 儲存訂閱連結到 <strong>calendar_sources</strong> 表。<br><br>
+        支援 Google Calendar、Apple Calendar 的 .ics 格式。Morning brief 自動呼叫 <code>sync-calendar</code> 撈取當天事件，解析 VEVENT 並處理 timezone/all-day event 差異。
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">🕐</div>
+      <div class="feat-title">空閒時間計算</div>
+      <div class="feat-body">
+        <code>free-time</code> 讀取今日 <strong>calendar_events</strong>，從預設工作時段（09:00-18:00）扣除行程，計算剩餘可用小時。<br><br>
+        Morning brief 若行事曆已連結，自動使用計算出的 free_time 作為 available_hours，取代手動輸入。
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-blue">
+    <strong>新增 CLI 指令</strong>：time-stats、smart-estimate、connect-calendar、sync-calendar、list-calendars、disconnect-calendar、free-time
+  </div>
+
+  <h3 style="font-size:0.85rem;color:var(--text2);margin:14px 0 10px;">新增資料表</h3>
+  <table class="schema-table">
+    <tr><th>資料表</th><th>用途</th><th>關鍵欄位</th></tr>
+    <tr><td class="col-name">time_models</td><td>EWMA 校準模型（per category）</td><td>rolling_ratio, sample_count, last_updated</td></tr>
+    <tr><td class="col-name">calendar_sources</td><td>已連結行事曆清單</td><td>name, source_path, source_type, enabled</td></tr>
+    <tr><td class="col-name">calendar_events</td><td>已同步的行事曆事件</td><td>summary, dtstart, dtend, event_date, source_id</td></tr>
+    <tr><td class="col-name">daily_logs</td><td>每日工時記錄</td><td>date, available_hours, tasks_completed</td></tr>
+  </table>
+
+  <div class="callout callout-purple" style="margin-top:14px;">
+    <strong>技術細節：ical timezone 處理</strong> — ical 事件的 dtstart 可能帶有 tzinfo（datetime）或為純日期（date）。程式碼特別處理：datetime 物件先 stripping tzinfo 轉成 naive datetime，date 物件（全天事件）轉為當天 00:00-23:59 區間，避免比較時的 TypeError。
+  </div>
+</div>
+
+<div class="divider" id="p2"></div>
+
+<!-- ══════════════════════════════════════
+     SECTION 3 — V2 P2
+════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-label">
+    <span class="phase-badge pb-p2">V2 P2</span>
+    <h2>Priority 2 — 向量長期記憶 &amp; Agent 失敗處理</h2>
+  </div>
+  <p class="phase-desc">讓系統永久記住重要的個人資訊，並自動偵測卡住的 Agent 任務</p>
+
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon">🧬</div>
+      <div class="feat-title">自製 TF-IDF 向量引擎</div>
+      <div class="feat-body">
+        <strong>_tokenize(text)</strong>：字元 bigram + trigram + 空白分詞，支援中文無需斷詞器。<br>
+        <strong>_build_vocab_and_vectors(texts)</strong>：建立 IDF 字典（log(N/df+1)）和 TF 矩陣。<br>
+        <strong>_text_to_vector(text, vocab_idx, idf)</strong>：將查詢字串投影到相同空間。<br><br>
+        Cosine similarity 搜尋，個人規模（&lt;1000 筆）線性掃描，毫秒內完成。
+      </div>
+      <div class="tags"><span class="tag tag-purple">零模型下載</span><span class="tag tag-green">中文友善</span><span class="tag tag-blue">numpy only</span></div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">💾</div>
+      <div class="feat-title">長期記憶 CRUD</div>
+      <div class="feat-body">
+        <strong>store-ltm</strong>：儲存重要陳述，計算並存入 vector（JSON float array）。<br>
+        <strong>recall-ltm</strong>：語意搜尋（cosine similarity top-N），去掉向量欄位再回傳。<br>
+        <strong>list-ltm</strong>：列出所有記憶，可按 type 過濾。<br>
+        <strong>clear-ltm</strong>：刪除單筆。<br><br>
+        Morning brief 用今天任務標題查詢 recall_relevant，結果放入 long_term_context 欄位。
+      </div>
+      <div class="tags"><span class="tag tag-cyan">語意搜尋</span><span class="tag tag-amber">永久儲存</span></div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">🤖</div>
+      <div class="feat-title">Agent 超時偵測</div>
+      <div class="feat-body">
+        <code>agent-status</code> 掃描所有 <strong>agent_processing</strong> 任務，計算距 updated_at 的分鐘數。超過 <strong>30 分鐘</strong>自動標記為 <strong>agent_failed</strong>。<br><br>
+        回傳 needs_attention[] 清單，morning brief 在 Top 3 之前先呈現需要注意的 Agent 任務。
+      </div>
+      <div class="tags"><span class="tag tag-rose">30 分鐘門檻</span><span class="tag tag-amber">自動偵測</span></div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">🔁</div>
+      <div class="feat-title">Agent 任務恢復</div>
+      <div class="feat-body">
+        <strong>agent-retry</strong>：將 agent_failed 任務重設為 agent_processing，更新 updated_at，供 Claude 重新派發。<br><br>
+        <strong>agent-handoff</strong>：將 Agent 任務改回 assignee=human，移出 AI 執行佇列，交由使用者自行處理。<br><br>
+        兩個動作都記錄到 action_log 留存稽核軌跡。
+      </div>
+      <div class="tags"><span class="tag tag-blue">retry</span><span class="tag tag-green">handoff</span></div>
+    </div>
+  </div>
+
+  <h3 style="font-size:0.85rem;color:var(--text2);margin:14px 0 10px;">新增資料表</h3>
+  <table class="schema-table">
+    <tr><th>資料表</th><th>用途</th><th>關鍵欄位</th></tr>
+    <tr><td class="col-name">long_term_memory</td><td>語意記憶（永久）</td><td>content, content_type, vector (JSON), created_at</td></tr>
+    <tr><td class="col-name">action_log</td><td>操作稽核軌跡</td><td>action_type, entity_type, entity_id, details (JSON)</td></tr>
+  </table>
+
+  <div class="callout callout-rose" style="margin-top:14px;">
+    <strong>除錯記錄：向量帶入回傳結果</strong> — 初版 recall_relevant() 在回傳陣列前忘記移除 vector 欄位（數百個 float），導致 JSON 輸出異常巨大。修復方式：<code>r.pop("vector", None)</code>。
+  </div>
+</div>
+
+<div class="divider" id="p3"></div>
+
+<!-- ══════════════════════════════════════
+     SECTION 4 — V2 P3
+════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-label">
+    <span class="phase-badge pb-p3">V2 P3</span>
+    <h2>Priority 3 — ML 權重自動調整 &amp; Telegram 整合</h2>
+  </div>
+  <p class="phase-desc">讓系統從你的行為中學習，並支援透過 Telegram 傳送晨間簡報</p>
+
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon">📊</div>
+      <div class="feat-title">推薦紀錄 Logging</div>
+      <div class="feat-body">
+        每次 morning brief 將 Top 3 任務的詳細因素貢獻記錄到 <strong>recommendation_log</strong>：<br><br>
+        · task_id、brief_date、position（1-3）<br>
+        · priority_score（總分）<br>
+        · factors（JSON，每個因素的分數）<br>
+        · was_completed（0/1）、completed_at<br><br>
+        當使用者 complete 任務時，自動 UPDATE was_completed=1。
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">⚖️</div>
+      <div class="feat-title">動態評分權重 DB</div>
+      <div class="feat-body">
+        <strong>scoring_weights</strong> 表儲存六個因素的當前權重，含 sample_count 和 last_trained。<br><br>
+        預設種子值：deadline 30.0、goal_priority 20.0、momentum 15.0、time_fit 15.0、skip_penalty 10.0、proximity 10.0。<br><br>
+        <strong>load_scoring_weights()</strong> 從 DB 讀取，提供給 morning_brief 評分使用。_source 欄位標示 "default" 或 "learned"。
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">🎓</div>
+      <div class="feat-title">Logistic Regression 權重學習</div>
+      <div class="feat-body">
+        <strong>learn_weights()</strong>：從最近 90 天 recommendation_log 取出資料，建立 feature matrix X（各因素貢獻正規化後的值）和 label vector y（was_completed）。<br><br>
+        純 numpy gradient descent（500 次迭代，lr=0.1），收斂後將 |θ| 正規化到總預算 100 分，寫回 scoring_weights 表。需要 ≥10 筆樣本。
+      </div>
+      <div class="tags"><span class="tag tag-purple">純 numpy</span><span class="tag tag-green">無 sklearn</span><span class="tag tag-amber">≥10 樣本</span></div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">📱</div>
+      <div class="feat-title">Telegram MarkdownV2 格式</div>
+      <div class="feat-body">
+        <code>morning --format telegram</code> 呼叫 <strong>_format_morning_telegram()</strong>，輸出 Telegram MarkdownV2 格式的文字（非 JSON）。<br><br>
+        包含：日期 header、可用時間、行事曆事件數、Agent 注意清單、Top 3 + 圖示 + 時間估計、長期記憶摘要、總估時。<br><br>
+        括弧 <code>()</code> 等特殊字元以 <code>\(...\)</code> 跳脫，符合 Telegram 規格。
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-size:0.85rem;color:var(--text2);margin:14px 0 10px;">新增資料表</h3>
+  <table class="schema-table">
+    <tr><th>資料表</th><th>用途</th><th>關鍵欄位</th></tr>
+    <tr><td class="col-name">recommendation_log</td><td>ML 訓練資料：每日推薦紀錄</td><td>task_id, brief_date, position, priority_score, factors (JSON), was_completed, completed_at</td></tr>
+    <tr><td class="col-name">scoring_weights</td><td>六個優先因素的動態權重</td><td>factor, weight, sample_count, last_trained</td></tr>
+  </table>
+
+  <div class="callout callout-blue">
+    <strong>新增 CLI 指令</strong>：weight-stats、learn-weights、morning --format telegram
+  </div>
+
+  <div class="flow" style="margin:14px 0;">
+    <div class="flow-box">每日 morning brief</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box blue">recommendation_log 寫入</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box green">complete 任務時標記</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box amber">learn-weights 訓練</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box purple">下次 morning 用新權重</div>
+  </div>
+</div>
+
+<div class="divider" id="bugs"></div>
+
+<!-- ══════════════════════════════════════
+     SECTION 5 — 除錯記錄
+════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-label">
+    <span class="sn sn-rose">🐛</span>
+    <h2>關鍵除錯記錄</h2>
+  </div>
+  <p class="phase-desc">開發過程中遇到的所有非預期問題及修復方式</p>
+
+  <div class="fix-list">
+    <div class="fix-item">
+      <span class="fix-badge">BUG #1</span>
+      <div class="fix-text">
+        <strong>sqlite3.Row 不支援 .get()</strong><br>
+        complete_task() 中用 task.get("category") 觸發 AttributeError。<br>
+        修復：改用 try/except 包裝 task["category"] 直接存取。
+      </div>
+    </div>
+    <div class="fix-item">
+      <span class="fix-badge">BUG #2</span>
+      <div class="fix-text">
+        <strong>向量帶入 recall 回傳結果</strong><br>
+        long_term_memory 的 vector 欄位（JSON 數百 float）出現在搜尋結果中。<br>
+        修復：recall_relevant() 回傳前加入 <code>r.pop("vector", None)</code>。
+      </div>
+    </div>
+    <div class="fix-item">
+      <span class="fix-badge">BUG #3</span>
+      <div class="fix-text">
+        <strong>孤立的 db.execute 殘留</strong><br>
+        TF-IDF fallback 路徑中有一行裸露的 db.execute 呼叫（沒有接收回傳值）。<br>
+        修復：移除該行。
+      </div>
+    </div>
+    <div class="fix-item">
+      <span class="fix-badge">BUG #4</span>
+      <div class="fix-text">
+        <strong>needs_attention 為空（Agent 超時偵測）</strong><br>
+        get_agent_status() 在 DB 更新後，in-memory 的 results 清單狀態仍為 agent_processing，導致 needs_attention 過濾不到任何項目。<br>
+        修復：在更新 DB 的同時也更新 in-memory dict：<code>t["status"] = "agent_failed"</code>。
+      </div>
+    </div>
+    <div class="fix-item">
+      <span class="fix-badge">BUG #5</span>
+      <div class="fix-text">
+        <strong>Agent 超時測試的 UTC/Local 時區不一致</strong><br>
+        SQLite <code>datetime('now', '-35 minutes')</code> 以 UTC 計算，Python <code>datetime.now()</code> 以本地時間計算，造成時差導致測試失敗。<br>
+        修復：測試改用 <code>(datetime.now() - timedelta(minutes=35)).strftime(...)</code>，確保時區一致。
+      </div>
+    </div>
+    <div class="fix-item">
+      <span class="fix-badge">BUG #6</span>
+      <div class="fix-text">
+        <strong>sentence-transformers 安裝失敗（改用純 numpy）</strong><br>
+        磁碟空間不足，CUDA 相關套件約 350MB 無法下載。<br>
+        修復：放棄 sentence-transformers 和 chromadb，改用自製 TF-IDF + numpy cosine similarity，個人規模下效果相當，零額外依賴。
+      </div>
+    </div>
+    <div class="fix-item">
+      <span class="fix-badge">BUG #7</span>
+      <div class="fix-text">
+        <strong>ical proxy 403 錯誤</strong><br>
+        嘗試在沙盒環境中連接外部 .ics URL 時，遭 proxy 封鎖（HTTP 403）。<br>
+        修復：改以 <code>--type ical_file</code> 搭配本地 .ics 檔案路徑做測試驗證；正式環境由使用者在本機執行不受限。
+      </div>
+    </div>
+    <div class="fix-item">
+      <span class="fix-badge">BUG #8</span>
+      <div class="fix-text">
+        <strong>morning_brief 中的死代碼（weights_trained）</strong><br>
+        曾有一段 <code>if False else False</code> 的死代碼嘗試查詢 scoring_weights（但 db 已關閉）。<br>
+        修復：整段移除，weights_source 改從 load_scoring_weights() 返回值取得。
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider" id="arch"></div>
+
+<!-- ══════════════════════════════════════
+     SECTION 6 — 架構總覽
+════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-label">
+    <span class="sn sn-green">🗺</span>
+    <h2>完整函式 &amp; 資料表總覽</h2>
+  </div>
+
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-title" style="margin-bottom:10px;">📋 核心函式（gti.py）</div>
+      <div class="cmd-list">
+        <div class="cmd-item"><span class="cmd-name">init_db() / migrate_db()</span><span class="cmd-desc">初始化 + 冪等遷移</span></div>
+        <div class="cmd-item"><span class="cmd-name">morning_brief(hours, format)</span><span class="cmd-desc">核心入口，含日曆/ML/記憶整合</span></div>
+        <div class="cmd-item"><span class="cmd-name">load_scoring_weights()</span><span class="cmd-desc">從 DB 讀取動態權重</span></div>
+        <div class="cmd-item"><span class="cmd-name">learn_weights()</span><span class="cmd-desc">numpy logistic regression 訓練</span></div>
+        <div class="cmd-item"><span class="cmd-name">weight_stats()</span><span class="cmd-desc">查看權重狀態</span></div>
+        <div class="cmd-item"><span class="cmd-name">_format_morning_telegram()</span><span class="cmd-desc">Telegram MarkdownV2 格式化</span></div>
+        <div class="cmd-item"><span class="cmd-name">store_long_term() / recall_relevant()</span><span class="cmd-desc">向量長記憶 CRUD</span></div>
+        <div class="cmd-item"><span class="cmd-name">_tokenize() / _build_vocab_and_vectors()</span><span class="cmd-desc">TF-IDF 核心</span></div>
+        <div class="cmd-item"><span class="cmd-name">get_agent_status()</span><span class="cmd-desc">含自動超時偵測</span></div>
+        <div class="cmd-item"><span class="cmd-name">sync_calendar() / calculate_free_time()</span><span class="cmd-desc">iCal 整合</span></div>
+        <div class="cmd-item"><span class="cmd-name">update_time_model() / smart_estimate()</span><span class="cmd-desc">EWMA 校準</span></div>
+        <div class="cmd-item"><span class="cmd-name">complete_task()</span><span class="cmd-desc">完成 + 更新 recommendation_log</span></div>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-title" style="margin-bottom:10px;">🗄️ 資料表一覽（19 張）</div>
+      <div class="cmd-list">
+        <div class="cmd-item"><span class="cmd-name" style="color:var(--green);">goals</span><span class="cmd-desc">目標</span></div>
+        <div class="cmd-item"><span class="cmd-name" style="color:var(--green);">projects</span><span class="cmd-desc">專案</span></div>
+        <div class="cmd-item"><span class="cmd-name" style="color:var(--green);">tasks</span><span class="cmd-desc">任務（含 assignee, timing）</span></div>
+        <div class="cmd-item"><span class="cmd-name" style="color:var(--green);">idea_bank</span><span class="cmd-desc">想法庫</span></div>
+        <div class="cmd-item"><span class="cmd-name" style="color:var(--green);">memories</span><span class="cmd-desc">短期記憶（14 天 TTL）</span></div>
+        <div class="cmd-item"><span class="cmd-name" style="color:var(--green);">daily_logs</span><span class="cmd-desc">每日工時 + 完成數</span></div>
+        <div class="cmd-item"><span class="cmd-name" style="color:var(--blue);">time_models</span><span class="cmd-desc">EWMA 校準模型（V2 P1）</span></div>
+        <div class="cmd-item"><span class="cmd-name" style="color:var(--blue);">calendar_sources</span><span class="cmd-desc">已連結行事曆（V2 P1）</span></div>
+        <div class="cmd-item"><span class="cmd-name" style="color:var(--blue);">calendar_events</span><span class="cmd-desc">同步後的事件（V2 P1）</span></div>
+        <div class="cmd-item"><span class="cmd-name" style="color:var(--purple);">long_term_memory</span><span class="cmd-desc">語意長記憶 + 向量（V2 P2）</span></div>
+        <div class="cmd-item"><span class="cmd-name" style="color:var(--purple);">action_log</span><span class="cmd-desc">操作稽核（V2 P2）</span></div>
+        <div class="cmd-item"><span class="cmd-name" style="color:var(--amber);">recommendation_log</span><span class="cmd-desc">ML 訓練資料（V2 P3）</span></div>
+        <div class="cmd-item"><span class="cmd-name" style="color:var(--amber);">scoring_weights</span><span class="cmd-desc">動態評分權重（V2 P3）</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════
+     SECTION 7 — 已知限制 & 未來方向
+════════════════════════════════════════ -->
+<div class="phase">
+  <div class="phase-label">
+    <span class="sn sn-amber">⚠</span>
+    <h2>已知限制 &amp; 未來可能方向</h2>
+  </div>
+
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon">⚠️</div>
+      <div class="feat-title">TF-IDF 在大量語料下退化</div>
+      <div class="feat-body">
+        當 long_term_memory 超過 ~2000 筆時，全量線性掃描開始變慢，詞彙矩陣也可能過大。<br><br>
+        <strong>可能升級路徑</strong>：改用 FAISS 或 sqlite-vss 向量索引，或在累積到一定量時才啟用近似搜尋。
+      </div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">⚠️</div>
+      <div class="feat-title">ML 訓練需時日積累</div>
+      <div class="feat-body">
+        learn-weights 需要 ≥10 筆，但訓練效果要到 ~30 筆後才有意義，~100 筆後才穩定。<br><br>
+        <strong>可能改善</strong>：初期用 Bayesian prior（預設權重作先驗），避免樣本少時過擬合。
+      </div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">⚠️</div>
+      <div class="feat-title">單檔架構可維護性</div>
+      <div class="feat-body">
+        2,429 行單一腳本在此規模仍可維護，但繼續增長後會變難。<br><br>
+        <strong>可能重構</strong>：拆分 db.py、scoring.py、calendar.py、memory.py 模組，保持 gti.py 作為 CLI 入口。
+      </div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">💡</div>
+      <div class="feat-title">尚未實作的 V2 功能</div>
+      <div class="feat-body">
+        · HTTP webhook server（gti.py serve --port 8080）供 OpenClaw 直接輪詢<br>
+        · 精緻儀表板 HTML（動量圖表可視化）<br>
+        · 多設備同步（目前 DB 僅本機）<br>
+        · Gmail / Slack / Notion 第三方整合
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end container -->
+
+<footer>
+  Get To It · 完整技術報告 V2 · 2026.04.01<br>
+  gti.py 2,429 行 · SQLite 19 張資料表 · 零外部 AI 模型依賴<br>
+  <span style="color:var(--border2);margin-top:6px;display:block;">Built with Claude · Python 3 + SQLite + numpy</span>
+</footer>
+
+</body>
+</html>

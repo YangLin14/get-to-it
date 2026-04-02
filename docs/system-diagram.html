@@ -1,0 +1,1706 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Get To It — 完整系統架構圖</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          "SF Pro Display",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background: #0d0f14;
+        color: #e8eaf0;
+        min-height: 100vh;
+        padding: 40px 24px;
+      }
+
+      /* ── Header ── */
+      .header {
+        text-align: center;
+        margin-bottom: 48px;
+      }
+      .header h1 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #a78bfa, #60a5fa, #34d399);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.5px;
+      }
+      .header p {
+        margin-top: 8px;
+        color: #6b7280;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+      }
+
+      /* ── Legend ── */
+      .legend {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.78rem;
+        color: #9ca3af;
+      }
+      .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      /* ── Main Grid ── */
+      .diagram {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      /* ── Layer ── */
+      .layer {
+        position: relative;
+        margin-bottom: 0;
+      }
+      .layer-label {
+        text-align: center;
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #4b5563;
+        margin-bottom: 10px;
+      }
+      .layer-row {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        align-items: stretch;
+      }
+
+      /* ── Arrow between layers ── */
+      .arrow-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 4px 0;
+        gap: 8px;
+      }
+      .arrow-down {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+      }
+      .arrow-line {
+        width: 2px;
+        height: 22px;
+        background: linear-gradient(to bottom, #374151, #4b5563);
+      }
+      .arrow-head {
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 7px solid #4b5563;
+      }
+      .arrow-label {
+        font-size: 0.65rem;
+        color: #4b5563;
+        text-align: center;
+        margin: 0 8px;
+      }
+      .arrow-bidirectional .arrow-head-up {
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 7px solid #4b5563;
+      }
+
+      /* ── Card ── */
+      .card {
+        border-radius: 14px;
+        padding: 16px 18px;
+        flex: 1;
+        min-width: 0;
+        border: 1px solid transparent;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        position: relative;
+        overflow: hidden;
+      }
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      }
+      .card-icon {
+        font-size: 1.4rem;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .card-title {
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+        letter-spacing: -0.2px;
+      }
+      .card-sub {
+        font-size: 0.72rem;
+        color: #9ca3af;
+        line-height: 1.5;
+      }
+      .card-tags {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      .tag {
+        font-size: 0.62rem;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+      }
+
+      /* ── Color themes ── */
+
+      /* User — purple */
+      .theme-user {
+        background: linear-gradient(135deg, #1e1b35, #1a1730);
+        border-color: #4c1d95;
+      }
+      .theme-user .card-title {
+        color: #a78bfa;
+      }
+      .theme-user .tag {
+        background: #2d1b69;
+        color: #c4b5fd;
+      }
+      .dot-user {
+        background: #a78bfa;
+      }
+
+      /* Input — blue */
+      .theme-input {
+        background: linear-gradient(135deg, #0f1f35, #0d1c30);
+        border-color: #1e40af;
+      }
+      .theme-input .card-title {
+        color: #60a5fa;
+      }
+      .theme-input .tag {
+        background: #1e3a5f;
+        color: #93c5fd;
+      }
+      .dot-input {
+        background: #60a5fa;
+      }
+
+      /* Core engine — green */
+      .theme-core {
+        background: linear-gradient(135deg, #0a2016, #081c12);
+        border-color: #065f46;
+      }
+      .theme-core .card-title {
+        color: #34d399;
+      }
+      .theme-core .tag {
+        background: #064e3b;
+        color: #6ee7b7;
+      }
+      .dot-core {
+        background: #34d399;
+      }
+
+      /* Data — amber */
+      .theme-data {
+        background: linear-gradient(135deg, #1c1407, #191205);
+        border-color: #78350f;
+      }
+      .theme-data .card-title {
+        color: #fbbf24;
+      }
+      .theme-data .tag {
+        background: #451a03;
+        color: #fde68a;
+      }
+      .dot-data {
+        background: #fbbf24;
+      }
+
+      /* API — rose */
+      .theme-api {
+        background: linear-gradient(135deg, #1e0a0f, #1a080d);
+        border-color: #881337;
+      }
+      .theme-api .card-title {
+        color: #fb7185;
+      }
+      .theme-api .tag {
+        background: #4c0519;
+        color: #fda4af;
+      }
+      .dot-api {
+        background: #fb7185;
+      }
+
+      /* OpenClaw — cyan */
+      .theme-openclaw {
+        background: linear-gradient(135deg, #071e26, #061a22);
+        border-color: #155e75;
+      }
+      .theme-openclaw .card-title {
+        color: #22d3ee;
+      }
+      .theme-openclaw .tag {
+        background: #0c3544;
+        color: #67e8f9;
+      }
+      .dot-openclaw {
+        background: #22d3ee;
+      }
+
+      /* Output — orange */
+      .theme-output {
+        background: linear-gradient(135deg, #1c0f04, #180d03);
+        border-color: #7c2d12;
+      }
+      .theme-output .card-title {
+        color: #fb923c;
+      }
+      .theme-output .tag {
+        background: #431407;
+        color: #fdba74;
+      }
+      .dot-output {
+        background: #fb923c;
+      }
+
+      /* ── Special: Core Engine big card ── */
+      .engine-section {
+        border-radius: 20px;
+        border: 1px solid #065f46;
+        background: linear-gradient(135deg, #071510, #060f0c);
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+      .engine-section::before {
+        content: "";
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(
+          circle,
+          rgba(52, 211, 153, 0.06),
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .engine-title {
+        text-align: center;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #34d399;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .engine-title::before,
+      .engine-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #065f46);
+      }
+      .engine-title::after {
+        background: linear-gradient(to left, transparent, #065f46);
+      }
+      .engine-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      .engine-card {
+        border-radius: 10px;
+        padding: 12px 14px;
+        background: rgba(52, 211, 153, 0.05);
+        border: 1px solid rgba(52, 211, 153, 0.15);
+      }
+      .engine-card-icon {
+        font-size: 1.2rem;
+        margin-bottom: 6px;
+        display: block;
+      }
+      .engine-card-title {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #34d399;
+        margin-bottom: 4px;
+      }
+      .engine-card-desc {
+        font-size: 0.68rem;
+        color: #6b7280;
+        line-height: 1.5;
+      }
+      .engine-card-highlight {
+        margin-top: 8px;
+        font-size: 0.62rem;
+        color: #059669;
+        font-weight: 600;
+        padding: 3px 8px;
+        background: rgba(52, 211, 153, 0.08);
+        border-radius: 20px;
+        display: inline-block;
+      }
+
+      /* ── Data Structure ── */
+      .data-hierarchy {
+        border-radius: 20px;
+        border: 1px solid #78350f;
+        background: linear-gradient(135deg, #110c04, #0e0a03);
+        padding: 20px;
+      }
+      .data-title {
+        text-align: center;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #fbbf24;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .data-title::before,
+      .data-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #78350f);
+      }
+      .data-title::after {
+        background: linear-gradient(to left, transparent, #78350f);
+      }
+      .data-flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .data-node {
+        border-radius: 10px;
+        padding: 12px 16px;
+        text-align: center;
+        min-width: 120px;
+      }
+      .data-node-icon {
+        font-size: 1.3rem;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .data-node-title {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #fbbf24;
+      }
+      .data-node-desc {
+        font-size: 0.65rem;
+        color: #9ca3af;
+        margin-top: 3px;
+      }
+      .data-node-fields {
+        margin-top: 8px;
+        text-align: left;
+        font-size: 0.6rem;
+        color: #6b7280;
+        line-height: 1.8;
+      }
+      .data-arrow {
+        color: #78350f;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+
+      .dn-goal {
+        background: rgba(251, 191, 36, 0.08);
+        border: 1px solid rgba(251, 191, 36, 0.2);
+      }
+      .dn-project {
+        background: rgba(251, 191, 36, 0.06);
+        border: 1px solid rgba(251, 191, 36, 0.15);
+      }
+      .dn-task {
+        background: rgba(251, 191, 36, 0.04);
+        border: 1px solid rgba(251, 191, 36, 0.1);
+      }
+      .dn-idea {
+        background: rgba(251, 191, 36, 0.03);
+        border: 1px solid rgba(251, 191, 36, 0.08);
+      }
+
+      /* ── OpenClaw Section ── */
+      .openclaw-section {
+        border-radius: 20px;
+        border: 1px solid #155e75;
+        background: linear-gradient(135deg, #041014, #030d11);
+        padding: 20px;
+      }
+      .openclaw-title {
+        text-align: center;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #22d3ee;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .openclaw-title::before,
+      .openclaw-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #155e75);
+      }
+      .openclaw-title::after {
+        background: linear-gradient(to left, transparent, #155e75);
+      }
+      .openclaw-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      .openclaw-card {
+        border-radius: 10px;
+        padding: 12px;
+        background: rgba(34, 211, 238, 0.04);
+        border: 1px solid rgba(34, 211, 238, 0.12);
+      }
+      .openclaw-card-icon {
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+      }
+      .openclaw-card-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #22d3ee;
+        margin-bottom: 4px;
+      }
+      .openclaw-card-desc {
+        font-size: 0.65rem;
+        color: #6b7280;
+        line-height: 1.5;
+      }
+      .platform-chips {
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px;
+      }
+      .platform-chip {
+        font-size: 0.58rem;
+        padding: 1px 6px;
+        border-radius: 20px;
+        background: rgba(34, 211, 238, 0.08);
+        color: #67e8f9;
+        border: 1px solid rgba(34, 211, 238, 0.15);
+      }
+
+      /* ── API Box ── */
+      .api-section {
+        border-radius: 20px;
+        border: 1px solid #881337;
+        background: linear-gradient(135deg, #120408, #0f030607);
+        padding: 20px;
+      }
+      .api-title {
+        text-align: center;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #fb7185;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .api-title::before,
+      .api-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #881337);
+      }
+      .api-title::after {
+        background: linear-gradient(to left, transparent, #881337);
+      }
+      .api-endpoints {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      .endpoint {
+        border-radius: 8px;
+        padding: 10px 12px;
+        background: rgba(251, 113, 133, 0.04);
+        border: 1px solid rgba(251, 113, 133, 0.12);
+      }
+      .endpoint-method {
+        font-size: 0.65rem;
+        font-weight: 700;
+        font-family: "SF Mono", "Fira Code", monospace;
+        margin-bottom: 3px;
+      }
+      .method-get {
+        color: #4ade80;
+      }
+      .method-post {
+        color: #60a5fa;
+      }
+      .endpoint-path {
+        font-size: 0.72rem;
+        font-family: "SF Mono", "Fira Code", monospace;
+        color: #fb7185;
+        margin-bottom: 5px;
+      }
+      .endpoint-desc {
+        font-size: 0.62rem;
+        color: #6b7280;
+        line-height: 1.4;
+      }
+
+      /* ── Output Section ── */
+      .output-section {
+        border-radius: 20px;
+        border: 1px solid #7c2d12;
+        background: linear-gradient(135deg, #100804, #0d0603);
+        padding: 20px;
+      }
+      .output-title {
+        text-align: center;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #fb923c;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .output-title::before,
+      .output-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #7c2d12);
+      }
+      .output-title::after {
+        background: linear-gradient(to left, transparent, #7c2d12);
+      }
+      .output-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      .output-card {
+        border-radius: 10px;
+        padding: 12px 14px;
+        background: rgba(251, 146, 60, 0.04);
+        border: 1px solid rgba(251, 146, 60, 0.12);
+      }
+      .output-card-icon {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+      }
+      .output-card-title {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #fb923c;
+        margin-bottom: 4px;
+      }
+      .output-card-desc {
+        font-size: 0.65rem;
+        color: #6b7280;
+        line-height: 1.5;
+      }
+      .output-mockup {
+        margin-top: 8px;
+        padding: 8px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 6px;
+        font-size: 0.6rem;
+        color: #4b5563;
+        font-family: "SF Mono", "Fira Code", monospace;
+        line-height: 1.6;
+      }
+      .mockup-accent {
+        color: #fb923c;
+      }
+      .mockup-green {
+        color: #34d399;
+      }
+      .mockup-blue {
+        color: #60a5fa;
+      }
+      .mockup-yellow {
+        color: #fbbf24;
+      }
+
+      /* ── Persona Bar ── */
+      .persona-bar {
+        border-radius: 14px;
+        padding: 14px 20px;
+        background: linear-gradient(90deg, #1e1b35, #1a1730);
+        border: 1px solid #4c1d95;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .persona-bar-icon {
+        font-size: 1.8rem;
+        flex-shrink: 0;
+      }
+      .persona-bar-content {
+        flex: 1;
+      }
+      .persona-bar-title {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #a78bfa;
+        margin-bottom: 4px;
+      }
+      .persona-bar-desc {
+        font-size: 0.72rem;
+        color: #6b7280;
+        line-height: 1.5;
+      }
+      .persona-states {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+      .persona-state {
+        font-size: 0.65rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 600;
+      }
+      .ps-normal {
+        background: rgba(52, 211, 153, 0.1);
+        color: #34d399;
+        border: 1px solid rgba(52, 211, 153, 0.2);
+      }
+      .ps-nudge {
+        background: rgba(251, 191, 36, 0.1);
+        color: #fbbf24;
+        border: 1px solid rgba(251, 191, 36, 0.2);
+      }
+      .ps-push {
+        background: rgba(251, 113, 133, 0.1);
+        color: #fb7185;
+        border: 1px solid rgba(251, 113, 133, 0.2);
+      }
+
+      /* ── Differentiators ── */
+      .diff-bar {
+        border-radius: 14px;
+        padding: 16px 20px;
+        background: linear-gradient(135deg, #0a0f1a, #080d17);
+        border: 1px solid #1e3a5f;
+        margin-top: 0;
+      }
+      .diff-title {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #3b82f6;
+        margin-bottom: 12px;
+      }
+      .diff-list {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .diff-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        flex: 1;
+        min-width: 200px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: rgba(59, 130, 246, 0.04);
+        border: 1px solid rgba(59, 130, 246, 0.1);
+      }
+      .diff-star {
+        color: #fbbf24;
+        font-size: 0.75rem;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .diff-text {
+        font-size: 0.7rem;
+        color: #9ca3af;
+        line-height: 1.5;
+      }
+      .diff-text strong {
+        color: #e8eaf0;
+        display: block;
+        margin-bottom: 1px;
+      }
+
+      /* ── MVP / V2 badges ── */
+      .mvp-badge {
+        display: inline-block;
+        font-size: 0.55rem;
+        font-weight: 800;
+        letter-spacing: 0.8px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        vertical-align: middle;
+        margin-left: 5px;
+        background: rgba(52, 211, 153, 0.15);
+        color: #34d399;
+        border: 1px solid rgba(52, 211, 153, 0.35);
+      }
+      .v2-badge {
+        display: inline-block;
+        font-size: 0.55rem;
+        font-weight: 800;
+        letter-spacing: 0.8px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        vertical-align: middle;
+        margin-left: 5px;
+        background: rgba(251, 191, 36, 0.1);
+        color: #fbbf24;
+        border: 1px solid rgba(251, 191, 36, 0.3);
+      }
+      /* ── MVP/V2 table ── */
+      .scope-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.72rem;
+        margin-top: 12px;
+      }
+      .scope-table th {
+        padding: 8px 12px;
+        text-align: left;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #4b5563;
+        border-bottom: 1px solid #1f2937;
+      }
+      .scope-table td {
+        padding: 8px 12px;
+        border-bottom: 1px solid #111827;
+        color: #9ca3af;
+        line-height: 1.5;
+      }
+      .scope-table tr:last-child td {
+        border-bottom: none;
+      }
+      .scope-table td:first-child {
+        color: #e8eaf0;
+        font-weight: 500;
+      }
+      .scope-mvp {
+        color: #34d399 !important;
+        font-weight: 600 !important;
+      }
+      .scope-v2 {
+        color: #fbbf24 !important;
+      }
+      .scope-no {
+        color: #374151 !important;
+      }
+
+      /* Decorative glow */
+      .glow-purple {
+        box-shadow: 0 0 40px rgba(167, 139, 250, 0.05);
+      }
+      .glow-green {
+        box-shadow: 0 0 40px rgba(52, 211, 153, 0.05);
+      }
+      .glow-cyan {
+        box-shadow: 0 0 40px rgba(34, 211, 238, 0.05);
+      }
+
+      @media (max-width: 700px) {
+        .engine-grid,
+        .openclaw-grid,
+        .output-grid {
+          grid-template-columns: 1fr;
+        }
+        .api-endpoints {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .data-flow {
+          flex-direction: column;
+        }
+        .data-arrow {
+          transform: rotate(90deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Get To It — 完整系統架構</h1>
+      <p>v0.3 · 2026.04.01 &nbsp;·&nbsp; V2 全部功能已完成實作</p>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot dot-user"></div>
+        使用者層
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-input"></div>
+        輸入介面
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-core"></div>
+        核心引擎
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-data"></div>
+        資料結構
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-api"></div>
+        Agent API
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-openclaw"></div>
+        OpenClaw 執行層
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-output"></div>
+        輸出介面
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #34d399"></div>
+        <span style="color: #34d399; font-weight: 700">MVP</span> 已實作
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #fbbf24"></div>
+        <span style="color: #fbbf24; font-weight: 700">V2</span>
+        已實作（2026.04.01）
+      </div>
+    </div>
+
+    <div class="diagram">
+      <!-- ── 1. USER ── -->
+      <div class="layer">
+        <div class="layer-label">使用者層</div>
+        <div class="layer-row">
+          <div
+            class="card theme-user glow-purple"
+            style="max-width: 400px; text-align: center"
+          >
+            <span class="card-icon">🧑‍💻</span>
+            <div class="card-title">Yang（使用者）</div>
+            <div class="card-sub">
+              創意多、容易分心、有啟動障礙<br />想要進步但需要被拉回主線
+            </div>
+            <div
+              class="card-tags"
+              style="justify-content: center; margin-top: 10px"
+            >
+              <span class="tag">高動力↗</span>
+              <span class="tag">多專案</span>
+              <span class="tag">需要方向感</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow-row">
+        <div class="arrow-down">
+          <div class="arrow-line"></div>
+          <div class="arrow-head"></div>
+        </div>
+        <div class="arrow-label">輸入：目標、想法、進度回報</div>
+        <div class="arrow-down">
+          <div
+            class="arrow-line"
+            style="background: linear-gradient(to top, #374151, #4b5563)"
+          ></div>
+          <div
+            class="arrow-head"
+            style="border-top: none; border-bottom: 7px solid #4b5563"
+          ></div>
+        </div>
+        <div class="arrow-label">輸出：Top 3、提醒、進度視覺化</div>
+      </div>
+
+      <!-- ── 2. INPUT ── -->
+      <div class="layer">
+        <div class="layer-label">輸入介面層</div>
+        <div class="layer-row">
+          <div class="card theme-input">
+            <span class="card-icon">🌅</span>
+            <div class="card-title">Cowork Skill</div>
+            <div class="card-sub">
+              桌面端主介面，晨間儀表板、快速捕捉、進度回顧
+            </div>
+            <div class="card-tags">
+              <span class="tag">主要介面</span>
+              <span class="tag">Claude 整合</span>
+            </div>
+          </div>
+          <div class="card theme-input">
+            <span class="card-icon">🎙️</span>
+            <div class="card-title">語音快速捕捉</div>
+            <div class="card-sub">
+              說出想法，OpenClaw 語音識別後自動送入系統分類
+            </div>
+            <div class="card-tags">
+              <span class="tag">隨時隨地</span>
+              <span class="tag">零摩擦輸入</span>
+            </div>
+          </div>
+          <div class="card theme-input">
+            <span class="card-icon">📱</span>
+            <div class="card-title">Telegram / WhatsApp</div>
+            <div class="card-sub">
+              透過 OpenClaw 推送晨間簡報、施壓提醒、進度更新
+            </div>
+            <div class="card-tags">
+              <span class="tag">推播通知</span>
+              <span class="tag">雙向互動</span>
+            </div>
+          </div>
+          <div class="card theme-input">
+            <span class="card-icon">⏱️</span>
+            <div class="card-title">
+              可用時間自填 <span class="mvp-badge">MVP</span>
+            </div>
+            <div class="card-sub">
+              晨間問一題：「今天有幾小時可以工作？」引擎依此動態配對任務大小
+            </div>
+            <div class="card-tags">
+              <span class="tag">零摩擦</span>
+              <span class="tag">防挫敗感</span>
+              <span
+                class="tag"
+                style="
+                  background: #064e3b;
+                  color: #34d399;
+                  border: 1px solid rgba(52, 211, 153, 0.3);
+                "
+                >iCal 整合 ✅ V2 Done</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow-row">
+        <div class="arrow-down">
+          <div class="arrow-line"></div>
+          <div class="arrow-head"></div>
+        </div>
+      </div>
+
+      <!-- ── 3. PERSONA ── -->
+      <div class="layer">
+        <div class="persona-bar">
+          <div class="persona-bar-icon">🤵‍♀️</div>
+          <div class="persona-bar-content">
+            <div class="persona-bar-title">秘書人格層（Secretary Persona）</div>
+            <div class="persona-bar-desc">
+              所有輸入和輸出都經過這一層包裝語氣——溫柔但些許嚴厲，為使用者的進步而存在
+            </div>
+            <div class="persona-states">
+              <span class="persona-state ps-normal"
+                >😊 日常模式：溫柔支持，慶祝進度</span
+              >
+              <span class="persona-state ps-nudge"
+                >🌤 溫柔提醒：停滯 1-2 天，輕聲詢問</span
+              >
+              <span class="persona-state ps-push"
+                >⚡ 認真施壓：停滯 3+ 天，直面問題</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow-row">
+        <div class="arrow-down">
+          <div class="arrow-line"></div>
+          <div class="arrow-head"></div>
+        </div>
+      </div>
+
+      <!-- ── 4. CORE ENGINE ── -->
+      <div class="layer">
+        <div class="engine-section glow-green">
+          <div class="engine-title">🧠 核心引擎（Get To It Brain）</div>
+          <div
+            class="engine-grid"
+            style="grid-template-columns: repeat(2, 1fr)"
+          >
+            <div class="engine-card">
+              <span class="engine-card-icon">⚖️</span>
+              <div class="engine-card-title">
+                優先排序引擎 <span class="mvp-badge">MVP</span>
+              </div>
+              <div class="engine-card-desc">
+                綜合七個因素動態排出 Top 3<br /><br />
+                · 截止日壓力<br />
+                · 目標推進力<br />
+                · <strong style="color: #34d399">當前動力狀態 ★</strong><br />
+                · 新想法興奮程度<br />
+                · 最近活躍動量<br />
+                · <strong style="color: #34d399">可用時間配對 ★</strong><br />
+                · 任務大小 / 依賴關係
+              </div>
+              <span class="engine-card-highlight"
+                >★ 動力感知 + 時間感知雙核心</span
+              >
+            </div>
+
+            <div class="engine-card">
+              <span class="engine-card-icon">💡</span>
+              <div class="engine-card-title">
+                想法評估引擎 <span class="mvp-badge">MVP</span>
+              </div>
+              <div class="engine-card-desc">
+                新想法輸入後自動判斷：<br /><br />
+                · 與現有目標關聯度（0-100%）<br />
+                · 是否應立即處理<br />
+                · 建議行動（進入主線 / 想法庫 / 下週評估）<br />
+                · 動力是否足夠值得現在衝
+              </div>
+              <span class="engine-card-highlight">★ 分心控制核心</span>
+            </div>
+
+            <div class="engine-card">
+              <span class="engine-card-icon">📈</span>
+              <div class="engine-card-title">
+                動量追蹤器 <span class="mvp-badge">MVP</span>
+              </div>
+              <div class="engine-card-desc">
+                <strong style="color: #34d399">雙訊號量化：</strong><br />
+                客觀：完成子任務數（自動收集）<br />
+                主觀：每日 emoji 自評 🔥 / 😐 / 😴<br /><br />
+                動量指數 = (子任務分 + emoji分) / 7天<br />
+                · 加速 / 減速趨勢偵測<br />
+                · 停滯 → 觸發秘書施壓
+              </div>
+              <span class="engine-card-highlight"
+                >★ 行為資料 + 主觀感受雙校正</span
+              >
+            </div>
+
+            <div class="engine-card">
+              <span class="engine-card-icon">🧩</span>
+              <div class="engine-card-title">
+                記憶層 + 回饋迴圈 <span class="mvp-badge">MVP</span>
+              </div>
+              <div class="engine-card-desc">
+                <strong style="color: #34d399">短期記憶（滾動 14 天）：</strong
+                ><br />
+                · 記錄拒絕任務的理由<br />
+                · 記錄使用者情緒標記<br />
+                · 「頭痛先不碰」→ 今天不施壓<br /><br />
+                <strong style="color: #34d399">回饋迴圈：</strong><br />
+                · 任務被跳過 3 次 → 觸發問詢<br />
+                · 自動調降「動力預測分數」<br />
+                <span style="color: #34d399; font-size: 0.62rem"
+                  >✅ 長期語意記憶（V2 P2 完成）</span
+                >
+              </div>
+              <span class="engine-card-highlight">★ 越用越懂你</span>
+            </div>
+
+            <div class="engine-card">
+              <span class="engine-card-icon">🎓</span>
+              <div class="engine-card-title">
+                ML 權重自學習
+                <span class="v2-badge" style="font-size: 0.58rem"
+                  >V2 P3 ✅</span
+                >
+              </div>
+              <div class="engine-card-desc">
+                <strong style="color: #fbbf24">recommendation_log：</strong
+                ><br />
+                每次 morning brief 記錄 Top 3 和各因素分數<br />
+                · complete 任務時自動標記 was_completed<br /><br />
+                <strong style="color: #fbbf24">logistic regression：</strong
+                ><br />
+                · 純 numpy gradient descent（500 iter）<br />
+                · 學習哪些因素真正預測完成行為<br />
+                · 需要 ≥10 樣本，~30 天後效果顯著
+              </div>
+              <span class="engine-card-highlight">★ 越用越懂你的排序</span>
+            </div>
+
+            <div class="engine-card">
+              <span class="engine-card-icon">📱</span>
+              <div class="engine-card-title">
+                Telegram 輸出
+                <span class="v2-badge" style="font-size: 0.58rem"
+                  >V2 P3 ✅</span
+                >
+              </div>
+              <div class="engine-card-desc">
+                <code style="font-size: 0.68rem; color: #22d3ee"
+                  >morning --format telegram</code
+                ><br /><br />
+                輸出 Telegram MarkdownV2 格式文字，可接 Bot API 或 OpenClaw
+                connector 推送到手機。<br /><br />
+                含：日期、可用時間、行事曆事件數、Agent 警示、Top 3 + 圖示 +
+                時間估計、長期記憶摘要。
+              </div>
+              <span class="engine-card-highlight"
+                >★ 不用打開 Claude 也能收到簡報</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow-row">
+        <div class="arrow-down">
+          <div class="arrow-line"></div>
+          <div class="arrow-head"></div>
+        </div>
+        <div class="arrow-label">讀寫</div>
+        <div class="arrow-down">
+          <div
+            class="arrow-line"
+            style="background: linear-gradient(to top, #374151, #4b5563)"
+          ></div>
+          <div
+            class="arrow-head"
+            style="border-top: none; border-bottom: 7px solid #4b5563"
+          ></div>
+        </div>
+      </div>
+
+      <!-- ── 5. DATA ── -->
+      <div class="layer">
+        <div class="data-hierarchy">
+          <div class="data-title">
+            🗄 主腦資料庫（SQLite） <span class="mvp-badge">MVP</span>
+            <span class="v2-badge">+ TF-IDF Vector ✅ V2 Done</span>
+          </div>
+          <div class="data-flow">
+            <div class="data-node dn-goal">
+              <span class="data-node-icon">🎯</span>
+              <div class="data-node-title">目標層 Goal</div>
+              <div class="data-node-desc">你想去哪裡？</div>
+              <div class="data-node-fields">
+                · id, title, vision<br />
+                · created_at<br />
+                · priority, status<br />
+                · deadline (optional)
+              </div>
+            </div>
+
+            <div class="data-arrow">→</div>
+
+            <div class="data-node dn-project">
+              <span class="data-node-icon">📁</span>
+              <div class="data-node-title">專案層 Project</div>
+              <div class="data-node-desc">怎麼去？</div>
+              <div class="data-node-fields">
+                · goal_id (parent)<br />
+                · milestones[]<br />
+                · progress_pct<br />
+                · momentum_score
+              </div>
+            </div>
+
+            <div class="data-arrow">→</div>
+
+            <div class="data-node dn-task">
+              <span class="data-node-icon">✅</span>
+              <div class="data-node-title">任務層 Task</div>
+              <div class="data-node-desc">今天走哪一步？</div>
+              <div class="data-node-fields">
+                · project_id<br />
+                · assignee: human | agent<br />
+                · estimated_minutes<br />
+                · skip_count<br />
+                <span style="color: #34d399; font-weight: 600"
+                  >status（六種）：</span
+                ><br />
+                &nbsp;pending → in_progress<br />
+                &nbsp;→ completed ✅<br />
+                &nbsp;→ skipped ⏭<br />
+                &nbsp;→ paused ⏸<br />
+                &nbsp;→ agent_processing 🔄<br />
+                &nbsp;→ agent_failed ❌
+              </div>
+            </div>
+
+            <div class="data-arrow">→</div>
+
+            <div class="data-node dn-idea">
+              <span class="data-node-icon">✨</span>
+              <div class="data-node-title">想法庫 Idea</div>
+              <div class="data-node-desc">路上看到什麼？</div>
+              <div class="data-node-fields">
+                · raw_input<br />
+                · relevance_score<br />
+                · motivation_at_capture<br />
+                · suggested_action
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow-row">
+        <div class="arrow-down">
+          <div class="arrow-line"></div>
+          <div class="arrow-head"></div>
+        </div>
+        <div class="arrow-label">Agent 讀寫協議</div>
+        <div class="arrow-down">
+          <div
+            class="arrow-line"
+            style="background: linear-gradient(to top, #374151, #4b5563)"
+          ></div>
+          <div
+            class="arrow-head"
+            style="border-top: none; border-bottom: 7px solid #4b5563"
+          ></div>
+        </div>
+      </div>
+
+      <!-- ── 6. API ── -->
+      <div class="layer">
+        <div class="api-section">
+          <div class="api-title">📡 Agent API（輕量 HTTP 接口）</div>
+          <div class="api-endpoints">
+            <div class="endpoint">
+              <div class="endpoint-method method-get">GET</div>
+              <div class="endpoint-path">/today</div>
+              <div class="endpoint-desc">
+                取得今日 Top 3 任務，含理由和時間估算
+              </div>
+            </div>
+            <div class="endpoint">
+              <div class="endpoint-method method-post">POST</div>
+              <div class="endpoint-path">/capture</div>
+              <div class="endpoint-desc">丟入新想法或任務，AI 自動分類評估</div>
+            </div>
+            <div class="endpoint">
+              <div class="endpoint-method method-post">POST</div>
+              <div class="endpoint-path">/update</div>
+              <div class="endpoint-desc">Agent 回報任務完成或進度百分比</div>
+            </div>
+            <div class="endpoint">
+              <div class="endpoint-method method-get">GET</div>
+              <div class="endpoint-path">/status</div>
+              <div class="endpoint-desc">查詢專案進度、動量圖、里程碑狀態</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow-row">
+        <div class="arrow-down">
+          <div class="arrow-line"></div>
+          <div class="arrow-head"></div>
+        </div>
+        <div class="arrow-label">ws://127.0.0.1:18789（Gateway Protocol）</div>
+        <div class="arrow-down">
+          <div
+            class="arrow-line"
+            style="background: linear-gradient(to top, #374151, #4b5563)"
+          ></div>
+          <div
+            class="arrow-head"
+            style="border-top: none; border-bottom: 7px solid #4b5563"
+          ></div>
+        </div>
+      </div>
+
+      <!-- ── 7. OPENCLAW ── -->
+      <div class="layer">
+        <div class="openclaw-section glow-cyan">
+          <div class="openclaw-title">
+            🦞 OpenClaw 執行層（本地 AI 助理平台）
+          </div>
+          <div class="openclaw-grid">
+            <div class="openclaw-card">
+              <div class="openclaw-card-icon">📨</div>
+              <div class="openclaw-card-title">通訊平台推送</div>
+              <div class="openclaw-card-desc">
+                晨間簡報、施壓提醒、任務完成通知透過你最常用的平台送達
+              </div>
+              <div class="platform-chips">
+                <span class="platform-chip">Telegram</span>
+                <span class="platform-chip">WhatsApp</span>
+                <span class="platform-chip">iMessage</span>
+                <span class="platform-chip">Slack</span>
+                <span class="platform-chip">Discord</span>
+                <span class="platform-chip">+15 more</span>
+              </div>
+            </div>
+
+            <div class="openclaw-card">
+              <div class="openclaw-card-icon">🤖</div>
+              <div class="openclaw-card-title">AI Agent 執行</div>
+              <div class="openclaw-card-desc">
+                被分配到 Agent 的任務由 Claude 或其他 LLM 自動執行，完成後回報給
+                Get To It
+              </div>
+              <div class="platform-chips">
+                <span class="platform-chip">Claude 3.x</span>
+                <span class="platform-chip">Browser 自動化</span>
+                <span class="platform-chip">檔案操作</span>
+                <span class="platform-chip">Agent 間通訊</span>
+              </div>
+            </div>
+
+            <div class="openclaw-card">
+              <div class="openclaw-card-icon">🎙️</div>
+              <div class="openclaw-card-title">語音 / 感知輸入</div>
+              <div class="openclaw-card-desc">
+                語音喚醒和持續對話，隨時隨地捕捉想法，支援 Talk Mode
+              </div>
+              <div class="platform-chips">
+                <span class="platform-chip">macOS</span>
+                <span class="platform-chip">iOS</span>
+                <span class="platform-chip">Android</span>
+                <span class="platform-chip">Wake Word</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow-row">
+        <div class="arrow-down">
+          <div class="arrow-line"></div>
+          <div class="arrow-head"></div>
+        </div>
+        <div class="arrow-label">渲染輸出</div>
+      </div>
+
+      <!-- ── 8. OUTPUT ── -->
+      <div class="layer">
+        <div class="output-section">
+          <div class="output-title">📊 輸出介面（Output Layer）</div>
+          <div class="output-grid">
+            <div class="output-card">
+              <div class="output-card-icon">🌅</div>
+              <div class="output-card-title">晨間儀表板</div>
+              <div class="output-card-desc">
+                每天早上推送，列出今日 Top 3 及理由
+              </div>
+              <div class="output-mockup">
+                <span class="mockup-accent">早安，Yang ☀️</span><br />
+                今天最重要的三件事：<br />
+                <span class="mockup-green">1.</span> Get To It API 設計
+                (60%↑)<br />
+                <span class="mockup-green">2.</span> 回覆 Nicole 的訊息
+                (2天了)<br />
+                <span class="mockup-yellow">3.</span> 播客核心概念整理 ⚡高動力
+              </div>
+            </div>
+
+            <div class="output-card">
+              <div class="output-card-icon">📈</div>
+              <div class="output-card-title">動量時間軸</div>
+              <div class="output-card-desc">
+                視覺化你最近的工作節奏，而非只有百分比
+              </div>
+              <div class="output-mockup">
+                <span class="mockup-accent">Get To It 專案</span><br />
+                動量：<span class="mockup-green">🔥🔥🔥🔥⬛⬛🔥</span><br />
+                里程碑：<br />
+                <span class="mockup-green">✅</span> 系統設計完成<br />
+                <span class="mockup-blue">🔄</span> MVP 開發中 ← 你在這
+              </div>
+            </div>
+
+            <div class="output-card">
+              <div class="output-card-icon">🤝</div>
+              <div class="output-card-title">人機協作清單</div>
+              <div class="output-card-desc">
+                任務在你和 AI Agent 之間流動，統一追蹤
+              </div>
+              <div class="output-mockup">
+                <span class="mockup-accent">撰寫產品文案</span><br />
+                <span class="mockup-green">✅ [你]</span> 提供品牌調性<br />
+                <span class="mockup-blue">⏳ [Agent]</span> 生成5個草稿<br />
+                <span class="mockup-yellow">⬜ [你]</span> 選擇並標注修改<br />
+                <span class="mockup-yellow">⬜ [Agent]</span> 輸出最終版本
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DIFFERENTIATORS ── -->
+      <div style="margin-top: 24px">
+        <div class="diff-bar">
+          <div class="diff-title">⭐ 核心差異化優勢</div>
+          <div class="diff-list">
+            <div class="diff-item">
+              <span class="diff-star">★</span>
+              <div class="diff-text">
+                <strong>動力感知優先排序</strong>
+                市場唯一考慮「用戶當前動力」的排序系統，不把人當機器
+              </div>
+            </div>
+            <div class="diff-item">
+              <span class="diff-star">★</span>
+              <div class="diff-text">
+                <strong>溫柔但施壓的秘書人格</strong>
+                Duolingo 貓頭鷹對生產力工具的移植，有情緒智商的提醒機制
+              </div>
+            </div>
+            <div class="diff-item">
+              <span class="diff-star">★</span>
+              <div class="diff-text">
+                <strong>人機協作任務流</strong>
+                任務可在人類和 AI Agent 之間無縫流動，業界首創概念
+              </div>
+            </div>
+            <div class="diff-item">
+              <span class="diff-star">★</span>
+              <div class="diff-text">
+                <strong>想法庫 + 目標關聯評估</strong>
+                新想法不被壓制也不被帶偏，而是被智慧分類和延後處理
+              </div>
+            </div>
+            <div class="diff-item">
+              <span class="diff-star">★</span>
+              <div class="diff-text">
+                <strong>Local-first + OpenClaw</strong>
+                隱私優先，透過你已在用的通訊平台互動，不需要新的 app 習慣
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MVP / V2 SCOPE TABLE ── -->
+    <div style="margin-top: 24px">
+      <div
+        style="
+          border-radius: 20px;
+          border: 1px solid #1f2937;
+          background: linear-gradient(135deg, #0a0c10, #080a0e);
+          padding: 20px;
+        "
+      >
+        <div
+          style="
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #4b5563;
+            margin-bottom: 14px;
+            text-align: center;
+          "
+        >
+          📋 完整功能實作狀態 — 截至 2026.04.01
+        </div>
+        <table class="scope-table">
+          <tr>
+            <th>功能</th>
+            <th style="color: #34d399">✅ 已實作</th>
+            <th style="color: #6b7280">⏳ 未來方向</th>
+          </tr>
+          <tr>
+            <td>時間感知</td>
+            <td class="scope-mvp">
+              手填 + iCal 自動同步（Google/Apple）+ EWMA 時間校準
+            </td>
+            <td style="color: #4b5563; font-size: 0.74rem">
+              行為層時間追蹤（鍵盤活動等）
+            </td>
+          </tr>
+          <tr>
+            <td>記憶層</td>
+            <td class="scope-mvp">
+              短期（14 天 TTL）+ 長期語意記憶（TF-IDF 向量搜尋，永久）
+            </td>
+            <td style="color: #4b5563; font-size: 0.74rem">跨月趨勢分析</td>
+          </tr>
+          <tr>
+            <td>回饋迴圈</td>
+            <td class="scope-mvp">
+              跳過計數 + 3 次觸發問詢 + ML 權重學習（logistic regression）
+            </td>
+            <td style="color: #4b5563; font-size: 0.74rem">
+              Bayesian 先驗（少樣本改善）
+            </td>
+          </tr>
+          <tr>
+            <td>資料庫</td>
+            <td class="scope-mvp">
+              SQLite WAL + 19 張資料表 + 純 numpy TF-IDF 向量（JSON 存入
+              SQLite）
+            </td>
+            <td style="color: #4b5563; font-size: 0.74rem">
+              FAISS / sqlite-vss 索引（1000+ 筆時）
+            </td>
+          </tr>
+          <tr>
+            <td>Task 狀態機</td>
+            <td class="scope-mvp">
+              六種狀態 + agent_retry + agent_handoff + 30 分鐘超時自動偵測
+            </td>
+            <td style="color: #4b5563; font-size: 0.74rem">複雜 Agent 編排</td>
+          </tr>
+          <tr>
+            <td>優先排序</td>
+            <td class="scope-mvp">
+              六因素靜態加權 → recommendation_log 記錄 → ML 動態學習權重
+            </td>
+            <td style="color: #4b5563; font-size: 0.74rem">—</td>
+          </tr>
+          <tr>
+            <td>輸出格式</td>
+            <td class="scope-mvp">
+              JSON（預設）+ Telegram MarkdownV2（--format telegram）
+            </td>
+            <td style="color: #4b5563; font-size: 0.74rem">
+              HTTP webhook server、HTML dashboard
+            </td>
+          </tr>
+          <tr>
+            <td>第三方整合</td>
+            <td class="scope-mvp">
+              iCal（Google/Apple 行事曆）+ Telegram Bot API（CLI pipe）
+            </td>
+            <td style="color: #4b5563; font-size: 0.74rem">
+              Gmail、Slack、Notion、Linear
+            </td>
+          </tr>
+          <tr>
+            <td>OpenClaw</td>
+            <td class="scope-mvp">
+              --format telegram 輸出可 pipe 到 OpenClaw Telegram connector
+            </td>
+            <td style="color: #4b5563; font-size: 0.74rem">
+              語音 Talk Mode、HTTP server 模式
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div
+      style="
+        text-align: center;
+        margin-top: 40px;
+        color: #374151;
+        font-size: 0.75rem;
+      "
+    >
+      Get To It · System Architecture v0.3 · 2026.04.01<br />
+      為「想法太多、容易分心、但真的想前進」的人設計
+    </div>
+
+  <!-- ── V3 ROADMAP ── -->
+  <div style="max-width:960px;margin:32px auto 0;padding:0 24px 60px;">
+    <div style="border-radius:20px;border:1px solid #2a3441;background:linear-gradient(135deg,#080c14,#0a0f1a);padding:24px;">
+      <div style="font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#4b5563;margin-bottom:18px;text-align:center;">
+        🗺 產品路線圖 — 三個版本並行
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
+
+        <div style="background:#0d1a0d;border:1px solid rgba(52,211,153,0.25);border-radius:14px;padding:16px;">
+          <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.5px;color:#34d399;margin-bottom:8px;">✅ V1 + V2 · COMPLETE</div>
+          <div style="font-size:0.82rem;font-weight:700;color:#e2e8f0;margin-bottom:8px;">Claude Cowork Skill</div>
+          <div style="font-size:0.72rem;color:#6b7280;line-height:1.7;">
+            旗艦體驗版。需要 Claude Pro 訂閱。<br>最佳 AI 品質，完整功能。<br><br>
+            <span style="color:#34d399;">·</span> 安裝：.skill 檔案<br>
+            <span style="color:#34d399;">·</span> 模型：Claude Sonnet<br>
+            <span style="color:#34d399;">·</span> 平台：Claude 桌面 App<br>
+            <span style="color:#34d399;">·</span> 收費：Claude Pro 訂閱含蓋
+          </div>
+        </div>
+
+        <div style="background:#0a0d1a;border:1px solid rgba(96,165,250,0.25);border-radius:14px;padding:16px;position:relative;">
+          <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.5px;color:#60a5fa;margin-bottom:8px;">🔨 V2.5 · BUILDING NOW</div>
+          <div style="font-size:0.82rem;font-weight:700;color:#e2e8f0;margin-bottom:8px;">OpenClaw / ClaHub Skill</div>
+          <div style="font-size:0.72rem;color:#6b7280;line-height:1.7;">
+            開放版。零訂閱費用。<br>用戶自帶模型（GPT-4o、Gemini…）<br><br>
+            <span style="color:#60a5fa;">·</span> 安裝：clawhub install get-to-it<br>
+            <span style="color:#60a5fa;">·</span> 模型：用戶自選<br>
+            <span style="color:#60a5fa;">·</span> 平台：OpenClaw（20+ 通訊）<br>
+            <span style="color:#60a5fa;">·</span> 收費：免費（MIT-0）
+          </div>
+        </div>
+
+        <div style="background:#140d08;border:1px solid rgba(251,146,60,0.25);border-radius:14px;padding:16px;">
+          <div style="font-size:0.68rem;font-weight:800;letter-spacing:1.5px;color:#fb923c;margin-bottom:8px;">📅 V3 · PLANNED</div>
+          <div style="font-size:0.82rem;font-weight:700;color:#e2e8f0;margin-bottom:8px;">Web App · SaaS</div>
+          <div style="font-size:0.72rem;color:#6b7280;line-height:1.7;">
+            收費版。瀏覽器零安裝。<br>用戶自帶 API Key，主機成本極低。<br><br>
+            <span style="color:#fb923c;">·</span> 安裝：無需安裝，開瀏覽器<br>
+            <span style="color:#fb923c;">·</span> 模型：OpenAI / Anthropic / Google<br>
+            <span style="color:#fb923c;">·</span> 平台：Web + Mobile PWA<br>
+            <span style="color:#fb923c;">·</span> 收費：Freemium，~$8/mo Premium
+          </div>
+        </div>
+
+      </div>
+
+      <div style="margin-top:14px;padding:12px 16px;background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.15);border-radius:10px;font-size:0.73rem;color:#6b7280;line-height:1.7;">
+        <strong style="color:#fbbf24;">獲利路徑：</strong> ClaHub Skill（MIT-0，免費）→ 品牌建立 + 社群 → V3 Webapp 轉化付費用戶。gti.py 核心後端在三個版本間完全共用，零重複開發。
+      </div>
+    </div>
+  </div>
+
+  </body>
+</html>
