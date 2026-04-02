@@ -12,14 +12,14 @@ Every morning, it tells you the three most important things to do today. It trac
 
 ## Two Versions
 
-| | Claude Cowork Skill | OpenClaw / ClaHub Skill |
-|---|---|---|
-| **Best for** | Claude Pro subscribers | Anyone — bring your own AI model |
-| **Platform** | Claude Desktop App | OpenClaw (20+ messaging platforms) |
-| **AI Model** | Claude Sonnet | Any model configured in OpenClaw |
-| **Install** | Download `.skill` file | `clawhub install get-to-it` |
-| **Cost** | Requires Claude Pro | Free |
-| **Telegram push** | Manual Bot setup required | Native OpenClaw feature |
+|                   | Claude Cowork Skill       | OpenClaw / ClawHub Skill           |
+| ----------------- | ------------------------- | ---------------------------------- |
+| **Best for**      | Claude Pro subscribers    | Anyone — bring your own AI model   |
+| **Platform**      | Claude Desktop App        | OpenClaw (20+ messaging platforms) |
+| **AI Model**      | Claude Sonnet             | Any model configured in OpenClaw   |
+| **Install**       | Download `.skill` file    | `clawhub install get-to-it`        |
+| **Cost**          | Requires Claude Pro       | Free                               |
+| **Telegram push** | Manual Bot setup required | Native OpenClaw feature            |
 
 ---
 
@@ -47,12 +47,12 @@ Requires the Claude Desktop App with Cowork mode enabled.
 2. Open Claude Desktop App and click the file → **Save Skill**
 3. Start a new conversation and say "morning brief" to get started
 
-### OpenClaw / ClaHub Skill (Open)
+### OpenClaw / ClawHub Skill (Open)
 
 Requires [OpenClaw](https://github.com/openclaw/openclaw) and Python 3.
 
 ```bash
-# Install from ClaHub
+# Install from ClawHub
 clawhub install get-to-it
 
 # Or install directly from this repo
@@ -121,7 +121,7 @@ get-to-it/
 │       ├── scripts/gti.py # Core CLI backend
 │       └── references/persona.md
 │
-├── clawhub-skill/         # OpenClaw / ClaHub version
+├── clawhub-skill/         # OpenClaw / ClawHub version
 │   └── get-to-it/
 │       ├── SKILL.md       # Model-agnostic behavior rules
 │       ├── scripts/gti.py # Core CLI backend (same engine)
@@ -138,8 +138,8 @@ get-to-it/
 ## License
 
 This repo is licensed under the [MIT License](LICENSE).
-The ClaHub-published version follows MIT-0 per ClaHub policy.
+The ClawHub-published version follows MIT-0 per ClawHub policy.
 
 ---
 
-*Built for people with too many ideas, too little focus — but the real drive to move forward.*
+_Built for people with too many ideas, too little focus — but the real drive to move forward._

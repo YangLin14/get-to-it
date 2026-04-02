@@ -12,14 +12,14 @@
 
 ## 兩個版本
 
-| | Claude Cowork Skill | OpenClaw / ClaHub Skill |
-|---|---|---|
-| **適合** | Claude Pro 訂閱用戶 | 任何人，自帶 AI 模型 |
-| **平台** | Claude 桌面 App | OpenClaw（20+ 通訊平台）|
-| **AI 模型** | Claude Sonnet | 你在 OpenClaw 設定的任何模型 |
-| **安裝** | 下載 `.skill` 檔案 | `clawhub install get-to-it` |
-| **費用** | 需要 Claude Pro 訂閱 | 免費 |
-| **Telegram 推送** | 需要自行設定 Bot | OpenClaw 原生支援 |
+|                   | Claude Cowork Skill  | OpenClaw / ClawHub Skill     |
+| ----------------- | -------------------- | ---------------------------- |
+| **適合**          | Claude Pro 訂閱用戶  | 任何人，自帶 AI 模型         |
+| **平台**          | Claude 桌面 App      | OpenClaw（20+ 通訊平台）     |
+| **AI 模型**       | Claude Sonnet        | 你在 OpenClaw 設定的任何模型 |
+| **安裝**          | 下載 `.skill` 檔案   | `clawhub install get-to-it`  |
+| **費用**          | 需要 Claude Pro 訂閱 | 免費                         |
+| **Telegram 推送** | 需要自行設定 Bot     | OpenClaw 原生支援            |
 
 ---
 
@@ -47,12 +47,12 @@
 2. 在 Claude 桌面 App 中點擊該檔案 → **Save Skill**
 3. 開新對話，說「早安」就啟動了
 
-### OpenClaw / ClaHub Skill（開放版）
+### OpenClaw / ClawHub Skill（開放版）
 
 需要先安裝 [OpenClaw](https://github.com/openclaw/openclaw) 和 Python 3。
 
 ```bash
-# 從 ClaHub 安裝
+# 從 ClawHub 安裝
 clawhub install get-to-it
 
 # 或從這個 repo 直接安裝
@@ -121,7 +121,7 @@ get-to-it/
 │       ├── scripts/gti.py # 核心 CLI 工具
 │       └── references/persona.md
 │
-├── clawhub-skill/         # OpenClaw / ClaHub 版本
+├── clawhub-skill/         # OpenClaw / ClawHub 版本
 │   └── get-to-it/
 │       ├── SKILL.md       # 模型無關的行為規則
 │       ├── scripts/gti.py # 核心 CLI 工具（同上）
@@ -138,8 +138,8 @@ get-to-it/
 ## 授權
 
 本 repo 採用 [MIT License](LICENSE)。
-透過 ClaHub 發布的版本依 ClaHub 政策自動採用 MIT-0。
+透過 ClawHub 發布的版本依 ClawHub 政策自動採用 MIT-0。
 
 ---
 
-*為「想法太多、容易分心、但真的想前進」的人設計。*
+_為「想法太多、容易分心、但真的想前進」的人設計。_

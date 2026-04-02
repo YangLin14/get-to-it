@@ -1,1165 +1,2003 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-TW">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Get To It — 完整使用手冊</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Get To It — 完整使用手冊</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-  :root {
-    --bg: #0d0f14;
-    --bg2: #111318;
-    --bg3: #161a22;
-    --border: #1f2937;
-    --border2: #2a3441;
-    --text: #e2e8f0;
-    --text2: #94a3b8;
-    --text3: #4b5563;
-    --purple: #a78bfa;
-    --purple-dim: #4c1d95;
-    --blue: #60a5fa;
-    --blue-dim: #1e3a5f;
-    --green: #34d399;
-    --green-dim: #064e3b;
-    --amber: #fbbf24;
-    --amber-dim: #451a03;
-    --rose: #fb7185;
-    --rose-dim: #881337;
-    --cyan: #22d3ee;
-    --cyan-dim: #155e75;
-    --orange: #fb923c;
-  }
+      :root {
+        --bg: #0d0f14;
+        --bg2: #111318;
+        --bg3: #161a22;
+        --border: #1f2937;
+        --border2: #2a3441;
+        --text: #e2e8f0;
+        --text2: #94a3b8;
+        --text3: #4b5563;
+        --purple: #a78bfa;
+        --purple-dim: #4c1d95;
+        --blue: #60a5fa;
+        --blue-dim: #1e3a5f;
+        --green: #34d399;
+        --green-dim: #064e3b;
+        --amber: #fbbf24;
+        --amber-dim: #451a03;
+        --rose: #fb7185;
+        --rose-dim: #881337;
+        --cyan: #22d3ee;
+        --cyan-dim: #155e75;
+        --orange: #fb923c;
+      }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', sans-serif;
-    line-height: 1.7;
-    font-size: 15px;
-  }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          "SF Pro Display",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          "PingFang TC",
+          sans-serif;
+        line-height: 1.7;
+        font-size: 15px;
+      }
 
-  /* ── Nav ── */
-  .nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(13,15,20,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .nav-logo {
-    font-size: 1rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, var(--purple), var(--blue), var(--green));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: -0.5px;
-  }
-  .nav-links {
-    display: flex;
-    gap: 24px;
-    list-style: none;
-  }
-  .nav-links a {
-    color: var(--text2);
-    text-decoration: none;
-    font-size: 0.82rem;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--text); }
+      /* ── Nav ── */
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(13, 15, 20, 0.92);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 14px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .nav-logo {
+        font-size: 1rem;
+        font-weight: 800;
+        background: linear-gradient(
+          135deg,
+          var(--purple),
+          var(--blue),
+          var(--green)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.5px;
+      }
+      .nav-links {
+        display: flex;
+        gap: 24px;
+        list-style: none;
+      }
+      .nav-links a {
+        color: var(--text2);
+        text-decoration: none;
+        font-size: 0.82rem;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--text);
+      }
 
-  /* ── Layout ── */
-  .container {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 60px 32px 120px;
-  }
+      /* ── Layout ── */
+      .container {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 60px 32px 120px;
+      }
 
-  /* ── Hero ── */
-  .hero {
-    text-align: center;
-    padding: 80px 0 60px;
-  }
-  .hero-badge {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--purple);
-    background: rgba(167,139,250,0.1);
-    border: 1px solid rgba(167,139,250,0.25);
-    padding: 5px 14px;
-    border-radius: 20px;
-    margin-bottom: 20px;
-  }
-  .hero h1 {
-    font-size: 3.2rem;
-    font-weight: 800;
-    letter-spacing: -1.5px;
-    line-height: 1.1;
-    margin-bottom: 16px;
-    background: linear-gradient(135deg, #e2e8f0 0%, var(--purple) 50%, var(--blue) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .hero-sub {
-    font-size: 1.1rem;
-    color: var(--text2);
-    max-width: 500px;
-    margin: 0 auto 32px;
-    line-height: 1.6;
-  }
-  .hero-tagline {
-    display: inline-block;
-    font-size: 0.82rem;
-    color: var(--text3);
-    border: 1px solid var(--border2);
-    padding: 6px 16px;
-    border-radius: 6px;
-    font-style: italic;
-  }
+      /* ── Hero ── */
+      .hero {
+        text-align: center;
+        padding: 80px 0 60px;
+      }
+      .hero-badge {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--purple);
+        background: rgba(167, 139, 250, 0.1);
+        border: 1px solid rgba(167, 139, 250, 0.25);
+        padding: 5px 14px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+      }
+      .hero h1 {
+        font-size: 3.2rem;
+        font-weight: 800;
+        letter-spacing: -1.5px;
+        line-height: 1.1;
+        margin-bottom: 16px;
+        background: linear-gradient(
+          135deg,
+          #e2e8f0 0%,
+          var(--purple) 50%,
+          var(--blue) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .hero-sub {
+        font-size: 1.1rem;
+        color: var(--text2);
+        max-width: 500px;
+        margin: 0 auto 32px;
+        line-height: 1.6;
+      }
+      .hero-tagline {
+        display: inline-block;
+        font-size: 0.82rem;
+        color: var(--text3);
+        border: 1px solid var(--border2);
+        padding: 6px 16px;
+        border-radius: 6px;
+        font-style: italic;
+      }
 
-  /* ── Section ── */
-  .section {
-    margin-bottom: 72px;
-  }
-  .section-tag {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  .section-number {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.72rem;
-    font-weight: 800;
-    flex-shrink: 0;
-  }
-  .sn-purple { background: rgba(167,139,250,0.15); color: var(--purple); }
-  .sn-blue   { background: rgba(96,165,250,0.15);  color: var(--blue); }
-  .sn-green  { background: rgba(52,211,153,0.15);  color: var(--green); }
-  .sn-amber  { background: rgba(251,191,36,0.15);  color: var(--amber); }
-  .sn-rose   { background: rgba(251,113,133,0.15); color: var(--rose); }
-  .sn-cyan   { background: rgba(34,211,238,0.15);  color: var(--cyan); }
-  .sn-orange { background: rgba(251,146,60,0.15);  color: var(--orange); }
+      /* ── Section ── */
+      .section {
+        margin-bottom: 72px;
+      }
+      .section-tag {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .section-number {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.72rem;
+        font-weight: 800;
+        flex-shrink: 0;
+      }
+      .sn-purple {
+        background: rgba(167, 139, 250, 0.15);
+        color: var(--purple);
+      }
+      .sn-blue {
+        background: rgba(96, 165, 250, 0.15);
+        color: var(--blue);
+      }
+      .sn-green {
+        background: rgba(52, 211, 153, 0.15);
+        color: var(--green);
+      }
+      .sn-amber {
+        background: rgba(251, 191, 36, 0.15);
+        color: var(--amber);
+      }
+      .sn-rose {
+        background: rgba(251, 113, 133, 0.15);
+        color: var(--rose);
+      }
+      .sn-cyan {
+        background: rgba(34, 211, 238, 0.15);
+        color: var(--cyan);
+      }
+      .sn-orange {
+        background: rgba(251, 146, 60, 0.15);
+        color: var(--orange);
+      }
 
-  h2 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    color: var(--text);
-  }
-  h3 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text);
-    margin: 28px 0 10px;
-  }
-  p {
-    color: var(--text2);
-    margin-bottom: 14px;
-  }
+      h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        color: var(--text);
+      }
+      h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 28px 0 10px;
+      }
+      p {
+        color: var(--text2);
+        margin-bottom: 14px;
+      }
 
-  /* ── Divider ── */
-  .divider {
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--border2), transparent);
-    margin: 56px 0;
-  }
+      /* ── Divider ── */
+      .divider {
+        height: 1px;
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--border2),
+          transparent
+        );
+        margin: 56px 0;
+      }
 
-  /* ── Cards grid ── */
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 14px;
-    margin: 24px 0;
-  }
-  .card {
-    border-radius: 14px;
-    padding: 20px;
-    border: 1px solid var(--border);
-    background: var(--bg2);
-    transition: transform 0.2s, border-color 0.2s;
-  }
-  .card:hover { transform: translateY(-2px); border-color: var(--border2); }
-  .card-icon { font-size: 1.6rem; margin-bottom: 10px; }
-  .card-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
-  .card-desc { font-size: 0.78rem; color: var(--text2); line-height: 1.5; }
+      /* ── Cards grid ── */
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 14px;
+        margin: 24px 0;
+      }
+      .card {
+        border-radius: 14px;
+        padding: 20px;
+        border: 1px solid var(--border);
+        background: var(--bg2);
+        transition:
+          transform 0.2s,
+          border-color 0.2s;
+      }
+      .card:hover {
+        transform: translateY(-2px);
+        border-color: var(--border2);
+      }
+      .card-icon {
+        font-size: 1.6rem;
+        margin-bottom: 10px;
+      }
+      .card-title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: var(--text);
+      }
+      .card-desc {
+        font-size: 0.78rem;
+        color: var(--text2);
+        line-height: 1.5;
+      }
 
-  .card-purple { border-color: rgba(167,139,250,0.2); }
-  .card-blue   { border-color: rgba(96,165,250,0.2); }
-  .card-green  { border-color: rgba(52,211,153,0.2); }
-  .card-amber  { border-color: rgba(251,191,36,0.2); }
-  .card-rose   { border-color: rgba(251,113,133,0.2); }
-  .card-cyan   { border-color: rgba(34,211,238,0.2); }
+      .card-purple {
+        border-color: rgba(167, 139, 250, 0.2);
+      }
+      .card-blue {
+        border-color: rgba(96, 165, 250, 0.2);
+      }
+      .card-green {
+        border-color: rgba(52, 211, 153, 0.2);
+      }
+      .card-amber {
+        border-color: rgba(251, 191, 36, 0.2);
+      }
+      .card-rose {
+        border-color: rgba(251, 113, 133, 0.2);
+      }
+      .card-cyan {
+        border-color: rgba(34, 211, 238, 0.2);
+      }
 
-  /* ── Workflow steps ── */
-  .workflow {
-    position: relative;
-    padding-left: 0;
-    margin: 24px 0;
-  }
-  .workflow-step {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 4px;
-    position: relative;
-  }
-  .step-left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
-  }
-  .step-dot {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.85rem;
-    font-weight: 800;
-    flex-shrink: 0;
-    z-index: 1;
-  }
-  .step-line {
-    width: 2px;
-    flex: 1;
-    min-height: 20px;
-    background: linear-gradient(to bottom, var(--border2), transparent);
-    margin: 4px 0;
-  }
-  .step-content {
-    padding: 0 0 28px 0;
-    flex: 1;
-  }
-  .step-time {
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-  .step-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 6px;
-  }
-  .step-desc {
-    font-size: 0.82rem;
-    color: var(--text2);
-    line-height: 1.6;
-  }
+      /* ── Workflow steps ── */
+      .workflow {
+        position: relative;
+        padding-left: 0;
+        margin: 24px 0;
+      }
+      .workflow-step {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 4px;
+        position: relative;
+      }
+      .step-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-shrink: 0;
+      }
+      .step-dot {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 800;
+        flex-shrink: 0;
+        z-index: 1;
+      }
+      .step-line {
+        width: 2px;
+        flex: 1;
+        min-height: 20px;
+        background: linear-gradient(to bottom, var(--border2), transparent);
+        margin: 4px 0;
+      }
+      .step-content {
+        padding: 0 0 28px 0;
+        flex: 1;
+      }
+      .step-time {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+      .step-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 6px;
+      }
+      .step-desc {
+        font-size: 0.82rem;
+        color: var(--text2);
+        line-height: 1.6;
+      }
 
-  /* ── Chat mockup ── */
-  .chat {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
-    margin: 20px 0;
-    font-size: 0.85rem;
-    line-height: 1.7;
-  }
-  .chat-title {
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--text3);
-    margin-bottom: 14px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border);
-  }
-  .msg {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 12px;
-    align-items: flex-start;
-  }
-  .msg-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-  .av-user { background: var(--blue-dim); color: var(--blue); font-weight: 700; }
-  .av-sec  { background: var(--purple-dim); color: var(--purple); font-weight: 700; }
-  .msg-body { flex: 1; }
-  .msg-name { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
-  .nm-user { color: var(--blue); }
-  .nm-sec  { color: var(--purple); }
-  .msg-text { color: var(--text2); font-size: 0.83rem; }
-  .msg-text strong { color: var(--text); }
-  .msg-text .hi { color: var(--green); font-weight: 600; }
-  .msg-text .warn { color: var(--amber); font-weight: 600; }
-  .msg-text .em { color: var(--purple); }
-  .msg-text .cmd { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.78rem; background: rgba(255,255,255,0.05); padding: 1px 5px; border-radius: 4px; color: var(--cyan); }
+      /* ── Chat mockup ── */
+      .chat {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 20px;
+        margin: 20px 0;
+        font-size: 0.85rem;
+        line-height: 1.7;
+      }
+      .chat-title {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--text3);
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+      }
+      .msg {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+        align-items: flex-start;
+      }
+      .msg-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .av-user {
+        background: var(--blue-dim);
+        color: var(--blue);
+        font-weight: 700;
+      }
+      .av-sec {
+        background: var(--purple-dim);
+        color: var(--purple);
+        font-weight: 700;
+      }
+      .msg-body {
+        flex: 1;
+      }
+      .msg-name {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+      }
+      .nm-user {
+        color: var(--blue);
+      }
+      .nm-sec {
+        color: var(--purple);
+      }
+      .msg-text {
+        color: var(--text2);
+        font-size: 0.83rem;
+      }
+      .msg-text strong {
+        color: var(--text);
+      }
+      .msg-text .hi {
+        color: var(--green);
+        font-weight: 600;
+      }
+      .msg-text .warn {
+        color: var(--amber);
+        font-weight: 600;
+      }
+      .msg-text .em {
+        color: var(--purple);
+      }
+      .msg-text .cmd {
+        font-family: "SF Mono", "Fira Code", monospace;
+        font-size: 0.78rem;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1px 5px;
+        border-radius: 4px;
+        color: var(--cyan);
+      }
 
-  /* ── Command table ── */
-  .cmd-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 0.82rem;
-  }
-  .cmd-table thead th {
-    text-align: left;
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--border2);
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--text3);
-  }
-  .cmd-table tbody td {
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
-  }
-  .cmd-table tbody tr:last-child td { border-bottom: none; }
-  .cmd-table tbody tr:hover td { background: var(--bg2); }
-  .cmd { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.78rem; color: var(--cyan); }
-  .cmd-desc { color: var(--text2); }
-  .cmd-trigger { color: var(--text3); font-size: 0.75rem; }
+      /* ── Command table ── */
+      .cmd-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 0.82rem;
+      }
+      .cmd-table thead th {
+        text-align: left;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border2);
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--text3);
+      }
+      .cmd-table tbody td {
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      .cmd-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+      .cmd-table tbody tr:hover td {
+        background: var(--bg2);
+      }
+      .cmd {
+        font-family: "SF Mono", "Fira Code", monospace;
+        font-size: 0.78rem;
+        color: var(--cyan);
+      }
+      .cmd-desc {
+        color: var(--text2);
+      }
+      .cmd-trigger {
+        color: var(--text3);
+        font-size: 0.75rem;
+      }
 
-  /* ── Differentiators ── */
-  .diff-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin: 24px 0;
-  }
-  .diff-item {
-    border-radius: 12px;
-    padding: 18px;
-    border: 1px solid var(--border);
-    background: var(--bg2);
-  }
-  .diff-badge {
-    display: inline-block;
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-bottom: 8px;
-  }
-  .db-star { background: rgba(251,191,36,0.1); color: var(--amber); border: 1px solid rgba(251,191,36,0.2); }
-  .diff-title { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-  .diff-desc { font-size: 0.76rem; color: var(--text2); line-height: 1.6; }
+      /* ── Differentiators ── */
+      .diff-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin: 24px 0;
+      }
+      .diff-item {
+        border-radius: 12px;
+        padding: 18px;
+        border: 1px solid var(--border);
+        background: var(--bg2);
+      }
+      .diff-badge {
+        display: inline-block;
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin-bottom: 8px;
+      }
+      .db-star {
+        background: rgba(251, 191, 36, 0.1);
+        color: var(--amber);
+        border: 1px solid rgba(251, 191, 36, 0.2);
+      }
+      .diff-title {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 6px;
+      }
+      .diff-desc {
+        font-size: 0.76rem;
+        color: var(--text2);
+        line-height: 1.6;
+      }
 
-  /* ── Persona table ── */
-  .persona-row {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    padding: 14px;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    border: 1px solid var(--border);
-  }
-  .persona-emoji { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
-  .persona-content { flex: 1; }
-  .persona-label { font-size: 0.72rem; font-weight: 700; margin-bottom: 4px; }
-  .persona-cond { font-size: 0.72rem; color: var(--text3); margin-bottom: 6px; }
-  .persona-example { font-size: 0.78rem; color: var(--text2); font-style: italic; line-height: 1.6; }
-  .pr-normal { background: rgba(52,211,153,0.03); }
-  .pr-nudge  { background: rgba(251,191,36,0.03); }
-  .pr-push   { background: rgba(251,113,133,0.03); }
-  .pl-normal { color: var(--green); }
-  .pl-nudge  { color: var(--amber); }
-  .pl-push   { color: var(--rose); }
+      /* ── Persona table ── */
+      .persona-row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 14px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        border: 1px solid var(--border);
+      }
+      .persona-emoji {
+        font-size: 1.4rem;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .persona-content {
+        flex: 1;
+      }
+      .persona-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      .persona-cond {
+        font-size: 0.72rem;
+        color: var(--text3);
+        margin-bottom: 6px;
+      }
+      .persona-example {
+        font-size: 0.78rem;
+        color: var(--text2);
+        font-style: italic;
+        line-height: 1.6;
+      }
+      .pr-normal {
+        background: rgba(52, 211, 153, 0.03);
+      }
+      .pr-nudge {
+        background: rgba(251, 191, 36, 0.03);
+      }
+      .pr-push {
+        background: rgba(251, 113, 133, 0.03);
+      }
+      .pl-normal {
+        color: var(--green);
+      }
+      .pl-nudge {
+        color: var(--amber);
+      }
+      .pl-push {
+        color: var(--rose);
+      }
 
-  /* ── Install box ── */
-  .install-box {
-    border-radius: 16px;
-    border: 1px solid rgba(167,139,250,0.3);
-    background: linear-gradient(135deg, rgba(167,139,250,0.05), rgba(96,165,250,0.05));
-    padding: 28px;
-    text-align: center;
-    margin: 32px 0;
-  }
-  .install-box h3 { color: var(--purple); font-size: 1.1rem; margin-bottom: 10px; margin-top: 0; }
-  .install-box p { margin-bottom: 16px; font-size: 0.85rem; }
-  .install-step {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--bg3);
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    padding: 10px 18px;
-    font-size: 0.82rem;
-    color: var(--text2);
-    margin: 4px;
-  }
-  .install-step strong { color: var(--text); }
+      /* ── Install box ── */
+      .install-box {
+        border-radius: 16px;
+        border: 1px solid rgba(167, 139, 250, 0.3);
+        background: linear-gradient(
+          135deg,
+          rgba(167, 139, 250, 0.05),
+          rgba(96, 165, 250, 0.05)
+        );
+        padding: 28px;
+        text-align: center;
+        margin: 32px 0;
+      }
+      .install-box h3 {
+        color: var(--purple);
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        margin-top: 0;
+      }
+      .install-box p {
+        margin-bottom: 16px;
+        font-size: 0.85rem;
+      }
+      .install-step {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--bg3);
+        border: 1px solid var(--border2);
+        border-radius: 8px;
+        padding: 10px 18px;
+        font-size: 0.82rem;
+        color: var(--text2);
+        margin: 4px;
+      }
+      .install-step strong {
+        color: var(--text);
+      }
 
-  /* ── Tip box ── */
-  .tip {
-    border-left: 3px solid var(--green);
-    background: rgba(52,211,153,0.04);
-    border-radius: 0 10px 10px 0;
-    padding: 14px 18px;
-    margin: 16px 0;
-    font-size: 0.82rem;
-    color: var(--text2);
-  }
-  .tip strong { color: var(--green); }
+      /* ── Tip box ── */
+      .tip {
+        border-left: 3px solid var(--green);
+        background: rgba(52, 211, 153, 0.04);
+        border-radius: 0 10px 10px 0;
+        padding: 14px 18px;
+        margin: 16px 0;
+        font-size: 0.82rem;
+        color: var(--text2);
+      }
+      .tip strong {
+        color: var(--green);
+      }
 
-  .warn-box {
-    border-left: 3px solid var(--amber);
-    background: rgba(251,191,36,0.04);
-    border-radius: 0 10px 10px 0;
-    padding: 14px 18px;
-    margin: 16px 0;
-    font-size: 0.82rem;
-    color: var(--text2);
-  }
-  .warn-box strong { color: var(--amber); }
+      .warn-box {
+        border-left: 3px solid var(--amber);
+        background: rgba(251, 191, 36, 0.04);
+        border-radius: 0 10px 10px 0;
+        padding: 14px 18px;
+        margin: 16px 0;
+        font-size: 0.82rem;
+        color: var(--text2);
+      }
+      .warn-box strong {
+        color: var(--amber);
+      }
 
-  /* ── Footer ── */
-  footer {
-    text-align: center;
-    padding: 40px;
-    color: var(--text3);
-    font-size: 0.78rem;
-    border-top: 1px solid var(--border);
-  }
+      /* ── Footer ── */
+      footer {
+        text-align: center;
+        padding: 40px;
+        color: var(--text3);
+        font-size: 0.78rem;
+        border-top: 1px solid var(--border);
+      }
 
-  @media (max-width: 640px) {
-    .hero h1 { font-size: 2rem; }
-    .diff-grid { grid-template-columns: 1fr; }
-    .nav-links { display: none; }
-    .container { padding: 40px 20px 80px; }
-  }
-</style>
-</head>
-<body>
+      @media (max-width: 640px) {
+        .hero h1 {
+          font-size: 2rem;
+        }
+        .diff-grid {
+          grid-template-columns: 1fr;
+        }
+        .nav-links {
+          display: none;
+        }
+        .container {
+          padding: 40px 20px 80px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="nav-logo">Get To It ✦</div>
+      <ul class="nav-links">
+        <li><a href="#install">安裝</a></li>
+        <li><a href="#daily">每日流程</a></li>
+        <li><a href="#commands">指令總覽</a></li>
+        <li><a href="#v2">V2 新功能</a></li>
+        <li><a href="#openclaw">OpenClaw</a></li>
+        <li><a href="#persona">秘書人格</a></li>
+        <li><a href="#why">過人之處</a></li>
+      </ul>
+    </nav>
 
-<nav class="nav">
-  <div class="nav-logo">Get To It ✦</div>
-  <ul class="nav-links">
-    <li><a href="#install">安裝</a></li>
-    <li><a href="#daily">每日流程</a></li>
-    <li><a href="#commands">指令總覽</a></li>
-    <li><a href="#v2">V2 新功能</a></li>
-    <li><a href="#openclaw">OpenClaw</a></li>
-    <li><a href="#persona">秘書人格</a></li>
-    <li><a href="#why">過人之處</a></li>
-  </ul>
-</nav>
-
-<div class="container">
-
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-badge">Personal Productivity · AI-Powered</div>
-    <h1>Get To It</h1>
-    <p class="hero-sub">不只是待辦清單。是一個很懂你、會記得你、會在你走偏的時候把你拉回來的 AI 私人秘書。</p>
-    <span class="hero-tagline">「為想法太多、容易分心、但真的想前進的人設計」</span>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- WHAT IS IT -->
-  <div class="section" id="what">
-    <div class="section-tag">
-      <div class="section-number sn-purple">01</div>
-      <h2>這是什麼？</h2>
-    </div>
-    <p>Get To It 是一個安裝在 Claude 桌面 app 裡的 AI Skill。它的角色不是「清單管理工具」，而是一個<strong style="color:var(--text)">私人秘書</strong>——它知道你所有的目標、專案、任務和想法，會在每天早上告訴你今天最重要的三件事，在你被新想法帶偏的時候提醒你，在你停滯太久的時候認真跟你說。</p>
-
-    <div class="cards">
-      <div class="card card-purple">
-        <div class="card-icon">🧠</div>
-        <div class="card-title">動力感知優先排序</div>
-        <div class="card-desc">不把人當機器。當你動力最高的時候，系統知道。當你今天只有 3 小時，它不會給你 5 小時的任務。</div>
+    <div class="container">
+      <!-- HERO -->
+      <div class="hero">
+        <div class="hero-badge">Personal Productivity · AI-Powered</div>
+        <h1>Get To It</h1>
+        <p class="hero-sub">
+          不只是待辦清單。是一個很懂你、會記得你、會在你走偏的時候把你拉回來的
+          AI 私人秘書。
+        </p>
+        <span class="hero-tagline"
+          >「為想法太多、容易分心、但真的想前進的人設計」</span
+        >
       </div>
-      <div class="card card-green">
-        <div class="card-icon">🤵‍♀️</div>
-        <div class="card-title">有情緒智商的秘書</div>
-        <div class="card-desc">平時溫柔支持。你跳過任務給了理由，它會記住。但拖了三天，它會認真跟你說話。</div>
-      </div>
-      <div class="card card-blue">
-        <div class="card-icon">💡</div>
-        <div class="card-title">想法捕捉 + 評估</div>
-        <div class="card-desc">隨手丟入想法，AI 自動評估跟你目前目標的關聯度，決定要加入主線、放進想法庫、還是下週再看。</div>
-      </div>
-      <div class="card card-amber">
-        <div class="card-icon">🤝</div>
-        <div class="card-title">人機協作清單</div>
-        <div class="card-desc">任務可以分配給你或 AI Agent 執行。清單統一追蹤，Agent 完成後自動更新進度。</div>
-      </div>
-      <div class="card card-rose">
-        <div class="card-icon">📈</div>
-        <div class="card-title">動量視覺化</div>
-        <div class="card-desc">不只看百分比。看你最近幾天的節奏，是在加速還是在減速。距離目標的感覺，比數字更真實。</div>
-      </div>
-      <div class="card card-cyan">
-        <div class="card-icon">🧩</div>
-        <div class="card-title">14 天滾動記憶</div>
-        <div class="card-desc">你說「今天頭痛先不碰這個」，明天它不會再用同樣力道推你。它記得你的狀態。</div>
-      </div>
-    </div>
-  </div>
 
-  <div class="divider"></div>
+      <div class="divider"></div>
 
-  <!-- INSTALL -->
-  <div class="section" id="install">
-    <div class="section-tag">
-      <div class="section-number sn-blue">02</div>
-      <h2>安裝方式</h2>
-    </div>
-    <p>Get To It 是一個 Claude Cowork Skill，需要在 Claude 桌面 app 裡安裝。</p>
-
-    <div class="install-box">
-      <h3>三步驟完成安裝</h3>
-      <p style="color:var(--text2);">確保你已安裝 Claude 桌面 App 並開啟 Cowork 模式</p>
-      <div>
-        <div class="install-step">
-          <span>1️⃣</span>
-          <span>下載 <strong>get-to-it.skill</strong> 檔案</span>
+      <!-- WHAT IS IT -->
+      <div class="section" id="what">
+        <div class="section-tag">
+          <div class="section-number sn-purple">01</div>
+          <h2>這是什麼？</h2>
         </div>
-        <div class="install-step">
-          <span>2️⃣</span>
-          <span>在 Claude 桌面 App 中 <strong>點擊 .skill 檔案</strong> → 「Save Skill」</span>
-        </div>
-        <div class="install-step">
-          <span>3️⃣</span>
-          <span>開新對話，說 <strong>「早安」</strong> 就啟動了</span>
-        </div>
-      </div>
-    </div>
+        <p>
+          Get To It 是一個安裝在 Claude 桌面 app 裡的 AI
+          Skill。它的角色不是「清單管理工具」，而是一個<strong
+            style="color: var(--text)"
+            >私人秘書</strong
+          >——它知道你所有的目標、專案、任務和想法，會在每天早上告訴你今天最重要的三件事，在你被新想法帶偏的時候提醒你，在你停滯太久的時候認真跟你說。
+        </p>
 
-    <div class="tip">
-      <strong>第一次使用：</strong>系統會自動初始化資料庫，儲存在你選擇的工作資料夾裡（<code style="font-family:monospace;font-size:0.8rem;color:var(--cyan);">.get-to-it.db</code>）。這個資料庫在每次對話之間持續存在，你的目標和進度不會消失。
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- DAILY FLOW -->
-  <div class="section" id="daily">
-    <div class="section-tag">
-      <div class="section-number sn-green">03</div>
-      <h2>一天的完整使用流程</h2>
-    </div>
-    <p>Get To It 圍繞著你一天的自然節奏設計，不需要改變習慣——只要在對的時刻跟它說話。</p>
-
-    <div class="workflow">
-
-      <div class="workflow-step">
-        <div class="step-left">
-          <div class="step-dot" style="background:rgba(167,139,250,0.15);color:var(--purple);">☀️</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-content">
-          <div class="step-time" style="color:var(--purple);">早上 · 啟動</div>
-          <div class="step-title">晨間簡報</div>
-          <div class="step-desc">說「早安」或「今天要做什麼」，秘書會問你今天有幾小時，然後從所有目標中挑出今天最重要的三件事，附上理由和時間估計。</div>
-          <div class="chat" style="margin-top:12px;">
-            <div class="chat-title">對話範例 · 晨間簡報</div>
-            <div class="msg">
-              <div class="msg-avatar av-user">你</div>
-              <div class="msg-body">
-                <div class="msg-name nm-user">Yang</div>
-                <div class="msg-text">早安</div>
-              </div>
+        <div class="cards">
+          <div class="card card-purple">
+            <div class="card-icon">🧠</div>
+            <div class="card-title">動力感知優先排序</div>
+            <div class="card-desc">
+              不把人當機器。當你動力最高的時候，系統知道。當你今天只有 3
+              小時，它不會給你 5 小時的任務。
             </div>
-            <div class="msg">
-              <div class="msg-avatar av-sec">秘</div>
-              <div class="msg-body">
-                <div class="msg-name nm-sec">秘書</div>
-                <div class="msg-text">早安 Yang ☀️ 今天有幾小時可以工作？</div>
-              </div>
-            </div>
-            <div class="msg">
-              <div class="msg-avatar av-user">你</div>
-              <div class="msg-body">
-                <div class="msg-name nm-user">Yang</div>
-                <div class="msg-text">大概 4 小時</div>
-              </div>
-            </div>
-            <div class="msg">
-              <div class="msg-avatar av-sec">秘</div>
-              <div class="msg-body">
-                <div class="msg-name nm-sec">秘書</div>
-                <div class="msg-text">
-                  昨天你完成了「撰寫 SKILL.md」，做得很好。<br><br>
-                  今天有 4 小時，我幫你挑了三件最值得做的事：<br><br>
-                  <span class="hi">1. 📌 測試完整流程</span>（60 分鐘）— 你離「Cowork Skill 整合」完成只差一步了<br>
-                  <span class="hi">2. 🔄 實作優先排序引擎</span>（120 分鐘）— 核心功能，擋住後面兩個任務<br>
-                  <span class="hi">3. ⚡ 實作短期記憶模組</span>（60 分鐘）— 你之前說這個最想做<br><br>
-                  預計 4 小時，剛好吃滿你今天的時間。從哪一件開始？
-                </div>
-              </div>
+          </div>
+          <div class="card card-green">
+            <div class="card-icon">🤵‍♀️</div>
+            <div class="card-title">有情緒智商的秘書</div>
+            <div class="card-desc">
+              平時溫柔支持。你跳過任務給了理由，它會記住。但拖了三天，它會認真跟你說話。
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="workflow-step">
-        <div class="step-left">
-          <div class="step-dot" style="background:rgba(96,165,250,0.15);color:var(--blue);">💡</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-content">
-          <div class="step-time" style="color:var(--blue);">工作中 · 隨時</div>
-          <div class="step-title">快速捕捉新想法</div>
-          <div class="step-desc">腦子裡突然冒出新想法，直接說。秘書會評估它跟你目前目標的關聯度，決定要不要插進今天的計畫，不讓你被它帶走，也不讓它就這樣消失。</div>
-          <div class="chat" style="margin-top:12px;">
-            <div class="chat-title">對話範例 · 想法捕捉</div>
-            <div class="msg">
-              <div class="msg-avatar av-user">你</div>
-              <div class="msg-body">
-                <div class="msg-name nm-user">Yang</div>
-                <div class="msg-text">我突然覺得應該做一個播客介紹 AI 工具</div>
-              </div>
+          <div class="card card-blue">
+            <div class="card-icon">💡</div>
+            <div class="card-title">想法捕捉 + 評估</div>
+            <div class="card-desc">
+              隨手丟入想法，AI
+              自動評估跟你目前目標的關聯度，決定要加入主線、放進想法庫、還是下週再看。
             </div>
-            <div class="msg">
-              <div class="msg-avatar av-sec">秘</div>
-              <div class="msg-body">
-                <div class="msg-name nm-sec">秘書</div>
-                <div class="msg-text">
-                  這個想法我記下來了，跟你現在的「建立 Get To It MVP」目標關聯度大概 <span class="warn">20%</span>，先放進想法庫。<br>
-                  你現在最重要的事還是<span class="em">「測試完整流程」</span>，繼續吧！
-                </div>
-              </div>
+          </div>
+          <div class="card card-amber">
+            <div class="card-icon">🤝</div>
+            <div class="card-title">人機協作清單</div>
+            <div class="card-desc">
+              任務可以分配給你或 AI Agent 執行。清單統一追蹤，Agent
+              完成後自動更新進度。
+            </div>
+          </div>
+          <div class="card card-rose">
+            <div class="card-icon">📈</div>
+            <div class="card-title">動量視覺化</div>
+            <div class="card-desc">
+              不只看百分比。看你最近幾天的節奏，是在加速還是在減速。距離目標的感覺，比數字更真實。
+            </div>
+          </div>
+          <div class="card card-cyan">
+            <div class="card-icon">🧩</div>
+            <div class="card-title">14 天滾動記憶</div>
+            <div class="card-desc">
+              你說「今天頭痛先不碰這個」，明天它不會再用同樣力道推你。它記得你的狀態。
             </div>
           </div>
         </div>
       </div>
 
-      <div class="workflow-step">
-        <div class="step-left">
-          <div class="step-dot" style="background:rgba(52,211,153,0.15);color:var(--green);">✅</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-content">
-          <div class="step-time" style="color:var(--green);">完成任務後</div>
-          <div class="step-title">標記完成，前進下一步</div>
-          <div class="step-desc">告訴秘書你完成了某件事。它會記錄、更新進度，然後告訴你下一步是什麼。不囉嗦，一句慶祝，直接繼續。</div>
-        </div>
-      </div>
+      <div class="divider"></div>
 
-      <div class="workflow-step">
-        <div class="step-left">
-          <div class="step-dot" style="background:rgba(251,191,36,0.15);color:var(--amber);">⏭</div>
-          <div class="step-line"></div>
+      <!-- INSTALL -->
+      <div class="section" id="install">
+        <div class="section-tag">
+          <div class="section-number sn-blue">02</div>
+          <h2>安裝方式</h2>
         </div>
-        <div class="step-content">
-          <div class="step-time" style="color:var(--amber);">卡住的時候</div>
-          <div class="step-title">跳過任務（說原因）</div>
-          <div class="step-desc">不想做某件事，跳過沒關係。說個原因，秘書會記住 14 天。如果同一件事跳過三次，它會主動問你：是任務太大？卡在哪裡？還是不想做了？</div>
-        </div>
-      </div>
+        <p>
+          Get To It 是一個 Claude Cowork Skill，需要在 Claude 桌面 app 裡安裝。
+        </p>
 
-      <div class="workflow-step">
-        <div class="step-left">
-          <div class="step-dot" style="background:rgba(251,146,60,0.15);color:var(--orange);">🌙</div>
-          <div class="step-line" style="background:transparent;"></div>
-        </div>
-        <div class="step-content">
-          <div class="step-time" style="color:var(--orange);">收工前</div>
-          <div class="step-title">每日收工回顧</div>
-          <div class="step-desc">說「收工」，秘書會回顧今天做了什麼、問你今天感覺如何（🔥 / 😐 / 😴），然後預告明天的 Top 3。這個 emoji 回報是動量追蹤的核心資料。</div>
-          <div class="chat" style="margin-top:12px;">
-            <div class="chat-title">對話範例 · 每日收工</div>
-            <div class="msg">
-              <div class="msg-avatar av-user">你</div>
-              <div class="msg-body">
-                <div class="msg-name nm-user">Yang</div>
-                <div class="msg-text">收工</div>
-              </div>
+        <div class="install-box">
+          <h3>三步驟完成安裝</h3>
+          <p style="color: var(--text2)">
+            確保你已安裝 Claude 桌面 App 並開啟 Cowork 模式
+          </p>
+          <div>
+            <div class="install-step">
+              <span>1️⃣</span>
+              <span>下載 <strong>get-to-it.skill</strong> 檔案</span>
             </div>
-            <div class="msg">
-              <div class="msg-avatar av-sec">秘</div>
-              <div class="msg-body">
-                <div class="msg-name nm-sec">秘書</div>
-                <div class="msg-text">
-                  今天你完成了：<br>
-                  <span class="hi">✅ 測試完整流程</span><br>
-                  <span class="hi">✅ 實作優先排序引擎</span><br><br>
-                  Get To It MVP 現在完成了 <span class="hi">62%</span>，很有進展！<br><br>
-                  今天整體感覺如何？<span class="hi">🔥 很順</span> / <span class="warn">😐 普通</span> / 😴 沒動力
-                </div>
-              </div>
+            <div class="install-step">
+              <span>2️⃣</span>
+              <span
+                >在 Claude 桌面 App 中 <strong>點擊 .skill 檔案</strong> →
+                「Save Skill」</span
+              >
+            </div>
+            <div class="install-step">
+              <span>3️⃣</span>
+              <span>開新對話，說 <strong>「早安」</strong> 就啟動了</span>
             </div>
           </div>
         </div>
-      </div>
 
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- COMMANDS -->
-  <div class="section" id="commands">
-    <div class="section-tag">
-      <div class="section-number sn-amber">04</div>
-      <h2>完整指令總覽</h2>
-    </div>
-    <p>不需要記憶指令格式，直接用自然語言說就好。以下是你可以說的所有觸發語和對應功能：</p>
-
-    <table class="cmd-table">
-      <thead>
-        <tr>
-          <th>你說的</th>
-          <th>功能</th>
-          <th>觸發關鍵字</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="cmd">早安 / 今天要做什麼</span></td>
-          <td class="cmd-desc">晨間簡報，今日 Top 3 + 動量摘要</td>
-          <td class="cmd-trigger">早安, morning, 今天, 要做什麼</td>
-        </tr>
-        <tr>
-          <td><span class="cmd">我想做 [目標]</span></td>
-          <td class="cmd-desc">新增目標，AI 幫你拆解成專案和任務</td>
-          <td class="cmd-trigger">目標, 新增, 我想, 計畫</td>
-        </tr>
-        <tr>
-          <td><span class="cmd">新增任務 [描述]</span></td>
-          <td class="cmd-desc">新增單一任務到指定專案</td>
-          <td class="cmd-trigger">新增任務, 加一個</td>
-        </tr>
-        <tr>
-          <td><span class="cmd">完成了 [任務]</span></td>
-          <td class="cmd-desc">標記任務完成，更新進度</td>
-          <td class="cmd-trigger">完成, 做完, done</td>
-        </tr>
-        <tr>
-          <td><span class="cmd">跳過這個，因為 [原因]</span></td>
-          <td class="cmd-desc">跳過任務，原因存入 14 天記憶</td>
-          <td class="cmd-trigger">跳過, 不做, skip</td>
-        </tr>
-        <tr>
-          <td><span class="cmd">進度怎麼樣了</span></td>
-          <td class="cmd-desc">查看所有目標進度 + 動量時間軸</td>
-          <td class="cmd-trigger">進度, 動量, review, 我做了什麼</td>
-        </tr>
-        <tr>
-          <td><span class="cmd">[任何想法]</span></td>
-          <td class="cmd-desc">自動評估與目標關聯度，分類存入想法庫</td>
-          <td class="cmd-trigger">我突然想, 我覺得應該, 有個想法</td>
-        </tr>
-        <tr>
-          <td><span class="cmd">看看想法庫</span></td>
-          <td class="cmd-desc">查看所有捕捉到的想法，決定要不要排進來</td>
-          <td class="cmd-trigger">想法庫, idea bank, 之前的想法</td>
-        </tr>
-        <tr>
-          <td><span class="cmd">收工 / 結束</span></td>
-          <td class="cmd-desc">每日收工回顧 + 心情記錄 + 明日預告</td>
-          <td class="cmd-trigger">收工, 結束, eod, 今天就到這裡</td>
-        </tr>
-        <tr>
-          <td><span class="cmd">這個交給 AI 做</span></td>
-          <td class="cmd-desc">將任務分配給 Agent，進入人機協作清單</td>
-          <td class="cmd-trigger">交給 AI, agent, 自動</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="warn-box">
-      <strong>不需要記這些</strong>：Get To It 的設計原則是零學習成本。你說什麼，它都能理解。上面的觸發關鍵字只是幫助你了解系統能做什麼。
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- PERSONA -->
-  <div class="section" id="persona">
-    <div class="section-tag">
-      <div class="section-number sn-rose">05</div>
-      <h2>秘書人格系統</h2>
-    </div>
-    <p>這是 Get To It 最特別的地方之一。秘書不是固定語氣，它會根據你最近的狀態動態調整：</p>
-
-    <div class="persona-row pr-normal">
-      <div class="persona-emoji">😊</div>
-      <div class="persona-content">
-        <div class="persona-label pl-normal">日常模式 — 你有在穩定前進</div>
-        <div class="persona-cond">觸發條件：今天或昨天有完成任務</div>
-        <div class="persona-example">「昨天你完成了三個任務，動力不錯！今天我幫你挑了……」溫柔、支持、慶祝小進步。</div>
-      </div>
-    </div>
-
-    <div class="persona-row pr-nudge">
-      <div class="persona-emoji">🌤</div>
-      <div class="persona-content">
-        <div class="persona-label pl-nudge">溫柔提醒 — 停滯 1-2 天</div>
-        <div class="persona-cond">觸發條件：1-2 天沒有任何任務完成</div>
-        <div class="persona-example">「昨天好像沒有動到什麼，沒事的。不過有幾件事在等你……今天哪怕只花 20 分鐘推一件，都是前進。」</div>
-      </div>
-    </div>
-
-    <div class="persona-row pr-push">
-      <div class="persona-emoji">⚡</div>
-      <div class="persona-content">
-        <div class="persona-label pl-push">認真施壓 — 停滯 3 天以上</div>
-        <div class="persona-cond">觸發條件：連續 3 天以上沒有實質進展</div>
-        <div class="persona-example">「Yang，我要認真跟你說了。你已經四天沒有進展了。今天不需要做完什麼大事，但你必須動一下。告訴我能做的最小那一步是什麼？」</div>
-      </div>
-    </div>
-
-    <div class="tip" style="margin-top:20px;">
-      <strong>記憶加持</strong>：如果你昨天說「頭痛先不碰這個」，今天即使是施壓模式，秘書也不會推這個任務。它記得你說過的話。
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- WHY -->
-  <div class="section" id="why">
-    <div class="section-tag">
-      <div class="section-number sn-cyan">06</div>
-      <h2>過人之處——跟其他工具的差異</h2>
-    </div>
-    <p>市面上的 Motion、Notion、ClickUp 等工具都假設你是有紀律的人，只需要更好的組織方式。Get To It 針對的是不同的人——</p>
-
-    <div class="diff-grid">
-      <div class="diff-item">
-        <div class="diff-badge db-star">★ 市場唯一</div>
-        <div class="diff-title">動力感知優先排序</div>
-        <div class="diff-desc">所有工具都假設你每天都是「就緒狀態」。Get To It 把你當前的動力和可用時間列為優先排序的核心因素。新想法出現的那一刻動力最高——它知道。</div>
-      </div>
-      <div class="diff-item">
-        <div class="diff-badge db-star">★ 情緒護城河</div>
-        <div class="diff-title">溫柔但施壓的秘書人格</div>
-        <div class="diff-desc">Duolingo 貓頭鷹的生產力版本。有個性的提醒比冷冰冰的通知有效十倍。沒有任何生產力工具在做這件事。</div>
-      </div>
-      <div class="diff-item">
-        <div class="diff-badge db-star">★ 業界首創</div>
-        <div class="diff-title">人機協作清單</div>
-        <div class="diff-desc">任務可以在你和 AI Agent 之間流動。你做決策，Agent 執行，清單統一追蹤。Taskade 有 AI agents，但它是團隊工具，不是個人秘書。</div>
-      </div>
-      <div class="diff-item">
-        <div class="diff-badge db-star">★ 防分心核心</div>
-        <div class="diff-title">想法庫 + 關聯度評估</div>
-        <div class="diff-desc">新想法出現時，現有工具要麼讓你忽略它，要麼讓你被帶走。Get To It 第三條路：立即評估、智慧分類、延後處理，動力保留，主線不斷。</div>
-      </div>
-      <div class="diff-item">
-        <div class="diff-badge db-star">★ 越用越懂你</div>
-        <div class="diff-title">14 天滾動記憶</div>
-        <div class="diff-desc">你給的每個跳過原因、每個情緒標記，系統都記得 14 天。一個不記得你昨天說什麼的秘書，不是好秘書。</div>
-      </div>
-      <div class="diff-item">
-        <div class="diff-badge db-star">★ 動量思維</div>
-        <div class="diff-title">節奏視覺化而非百分比</div>
-        <div class="diff-desc">「你完成了 60%」沒什麼感覺。「你最近 7 天：🔥🔥😐🔥🔥😴🔥，動量指數 72，趨勢加速中」——這個你感覺得到。</div>
-      </div>
-    </div>
-
-    <h3 style="margin-top:36px;">一句話說清楚：</h3>
-    <div style="border:1px solid var(--border2);border-radius:14px;padding:24px;background:var(--bg2);text-align:center;margin-top:12px;">
-      <p style="font-size:1.05rem;color:var(--text);line-height:1.7;margin:0;">
-        其他工具幫助<strong style="color:var(--text);">「已經有紀律的人更有效率」</strong>。<br>
-        Get To It 幫助<strong style="color:var(--purple);">「有動力但容易走偏的人找到方向並堅持走下去」</strong>。
-      </p>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- TIPS -->
-  <div class="section">
-    <div class="section-tag">
-      <div class="section-number sn-orange">07</div>
-      <h2>MVP 使用小技巧</h2>
-    </div>
-
-    <h3>🎯 第一次用：從一個目標開始</h3>
-    <p>不要一次把所有目標都輸入進去。挑一個你現在最在乎的目標，讓秘書幫你拆解成具體任務，用一週看看。</p>
-
-    <h3>⏱ 每天說「今天有幾小時」</h3>
-    <p>這一個動作讓優先排序算法有時間感知，推給你的任務才會真的適合今天。</p>
-
-    <h3>🔥 收工前記得回報 emoji</h3>
-    <p>🔥 / 😐 / 😴 這三個心情回報是動量追蹤的核心。持續兩週，系統就能畫出你真實的工作節奏曲線。</p>
-
-    <h3>💡 有想法就直接說</h3>
-    <p>不需要先判斷「這個值不值得記錄」。直接說，秘書幫你判斷。讓你的腦子只負責想，不負責整理。</p>
-
-    <h3>📝 跳過任務時一定給原因</h3>
-    <p>「跳過，因為今天沒時間」這個原因存入記憶後，秘書明天會幫你考慮時間因素。沒有原因的跳過，系統只能猜。</p>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- V2 FEATURES -->
-  <div class="section" id="v2">
-    <div class="section-tag">
-      <div class="section-number" style="background:rgba(251,191,36,0.1);color:var(--amber);">V2</div>
-      <h2>V2 新功能詳解</h2>
-    </div>
-    <p>V2 版本新增了五個模組，讓系統從「好用」升級到「越用越懂你」。以下是每個功能的使用方式。</p>
-
-    <div style="display:flex;flex-direction:column;gap:24px;margin-top:24px;">
-
-      <!-- P1a: Time Tracking -->
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:22px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-          <span style="font-size:1.2rem;">⏱️</span>
-          <strong style="color:var(--text);font-size:0.95rem;">時間追蹤 &amp; 預測校準</strong>
-          <span style="font-size:0.65rem;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);color:var(--blue);padding:2px 8px;border-radius:10px;font-weight:700;">V2 P1</span>
-        </div>
-        <p style="color:var(--text2);font-size:0.84rem;margin-bottom:12px;">開始任務前用「開始做」，完成後用「做完了」——系統自動計時。做越多次同類型任務，預測越準。</p>
-        <div class="chat" style="margin-top:0;">
-          <div class="chat-title">對話範例</div>
-          <div class="msg">
-            <div class="msg-avatar av-user">你</div>
-            <div class="msg-body"><div class="msg-name nm-user">Yang</div><div class="msg-text">我要開始做任務 #3 了</div></div>
-          </div>
-          <div class="msg">
-            <div class="msg-avatar av-sec">秘</div>
-            <div class="msg-body"><div class="msg-name nm-sec">秘書</div><div class="msg-text">好，計時開始 🟢 加油！</div></div>
-          </div>
-          <div class="msg">
-            <div class="msg-avatar av-user">你</div>
-            <div class="msg-body"><div class="msg-name nm-user">Yang</div><div class="msg-text">做完了</div></div>
-          </div>
-          <div class="msg">
-            <div class="msg-avatar av-sec">秘</div>
-            <div class="msg-body"><div class="msg-name nm-sec">秘書</div><div class="msg-text">完成 ✅ 實際用了 <span class="hi">47 分鐘</span>（估計 60 分鐘，你這次快了一點）。下次同類任務我幫你校正到 50 分鐘。</div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- P1b: Calendar -->
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:22px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-          <span style="font-size:1.2rem;">📅</span>
-          <strong style="color:var(--text);font-size:0.95rem;">行事曆整合（iCal）</strong>
-          <span style="font-size:0.65rem;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);color:var(--blue);padding:2px 8px;border-radius:10px;font-weight:700;">V2 P1</span>
-        </div>
-        <p style="color:var(--text2);font-size:0.84rem;margin-bottom:10px;">連結 Google Calendar 或 Apple Calendar 的 .ics 訂閱連結，晨間簡報自動抓取今天行程並算出真正的空閒時間。</p>
-        <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:0.78rem;color:var(--text2);">
-          <strong style="color:var(--cyan);">如何連結 Google Calendar：</strong><br>
-          1. Google Calendar → 設定 → 找到你的行事曆 → 「整合行事曆」→ 複製 <strong>iCal 格式</strong> 的訂閱連結<br>
-          2. 告訴秘書：「幫我連結行事曆，連結是 <em>[你的 URL]</em>」<br>
-          3. 之後每天早上，系統自動抓取並計算今天空閒時間
-        </div>
-        <div class="tip" style="margin-top:10px;">
-          <strong>注意</strong>：iCal 訂閱連結通常包含私人金鑰，請勿在公開場合分享。
-        </div>
-      </div>
-
-      <!-- P2a: Long-term Memory -->
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:22px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-          <span style="font-size:1.2rem;">🧠</span>
-          <strong style="color:var(--text);font-size:0.95rem;">語意長期記憶</strong>
-          <span style="font-size:0.65rem;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.3);color:var(--purple);padding:2px 8px;border-radius:10px;font-weight:700;">V2 P2</span>
-        </div>
-        <p style="color:var(--text2);font-size:0.84rem;margin-bottom:12px;">和短期記憶（14 天自動過期）不同，長期記憶<strong style="color:var(--text);">永久保存</strong>，並且有語意搜尋能力——你跟它說的重要事情，以後的早間簡報會自動在相關時刻提起。</p>
-        <div class="chat">
-          <div class="chat-title">對話範例</div>
-          <div class="msg">
-            <div class="msg-avatar av-user">你</div>
-            <div class="msg-body"><div class="msg-name nm-user">Yang</div><div class="msg-text">我最有效率的時間是早上 9-11 點，下午很容易分心</div></div>
-          </div>
-          <div class="msg">
-            <div class="msg-avatar av-sec">秘</div>
-            <div class="msg-body"><div class="msg-name nm-sec">秘書</div><div class="msg-text">好，我記下來了 🧠 以後早間簡報會幫你把最需要專注的任務排在早上。</div></div>
-          </div>
-        </div>
-        <p style="font-size:0.78rem;color:var(--text2);margin-top:10px;">秘書會自動存入重要的個人偏好、限制、洞察——你不需要手動說「記住這件事」。</p>
-      </div>
-
-      <!-- P2b: Agent Monitoring -->
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:22px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-          <span style="font-size:1.2rem;">🤖</span>
-          <strong style="color:var(--text);font-size:0.95rem;">Agent 任務監控 &amp; 失敗恢復</strong>
-          <span style="font-size:0.65rem;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.3);color:var(--purple);padding:2px 8px;border-radius:10px;font-weight:700;">V2 P2</span>
-        </div>
-        <p style="color:var(--text2);font-size:0.84rem;margin-bottom:12px;">交給 AI Agent 執行的任務會被持續監控。超過 <strong style="color:var(--text);">30 分鐘沒有回應</strong>，系統自動標記為失敗並在早間簡報中提醒你。</p>
-        <div class="chat">
-          <div class="chat-title">Agent 任務失敗範例</div>
-          <div class="msg">
-            <div class="msg-avatar av-sec">秘</div>
-            <div class="msg-body"><div class="msg-name nm-sec">秘書</div><div class="msg-text">⚠️ 有一個 Agent 任務出問題了：<span class="hi">#5 分析競品資料</span>（已超過 30 分鐘無回應）。要<span class="em">重新嘗試</span>，還是<span class="warn">改由你自己來做</span>？</div></div>
-          </div>
-          <div class="msg">
-            <div class="msg-avatar av-user">你</div>
-            <div class="msg-body"><div class="msg-name nm-user">Yang</div><div class="msg-text">重新嘗試吧</div></div>
-          </div>
-          <div class="msg">
-            <div class="msg-avatar av-sec">秘</div>
-            <div class="msg-body"><div class="msg-name nm-sec">秘書</div><div class="msg-text">好，已重新派發給 Agent。現在來看今天的 Top 3⋯⋯</div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- P3a: ML Weights -->
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:22px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-          <span style="font-size:1.2rem;">🎓</span>
-          <strong style="color:var(--text);font-size:0.95rem;">ML 優先排序自學習</strong>
-          <span style="font-size:0.65rem;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:var(--amber);padding:2px 8px;border-radius:10px;font-weight:700;">V2 P3</span>
-        </div>
-        <p style="color:var(--text2);font-size:0.84rem;margin-bottom:12px;">系統默默觀察你<strong style="color:var(--text);">每天真正完成哪些推薦任務</strong>，累積夠多資料後（約 10 天），用機器學習調整優先排序的權重，讓 Top 3 越來越符合你的實際行為。</p>
         <div class="tip">
-          <strong>不需要任何操作</strong>：記錄是自動的。你只要持續正常使用，系統就會自我優化。如果好奇目前狀態，可以問秘書「現在的排序是默認還是已學習的？」
+          <strong>第一次使用：</strong
+          >系統會自動初始化資料庫，儲存在你選擇的工作資料夾裡（<code
+            style="
+              font-family: monospace;
+              font-size: 0.8rem;
+              color: var(--cyan);
+            "
+            >.get-to-it.db</code
+          >）。這個資料庫在每次對話之間持續存在，你的目標和進度不會消失。
         </div>
       </div>
 
-    </div>
-  </div>
+      <div class="divider"></div>
 
-  <div class="divider"></div>
-
-  <!-- OPENCLAW SECTION -->
-  <div class="section" id="openclaw">
-    <div class="section-tag">
-      <div class="section-number" style="background:rgba(34,211,238,0.1);color:var(--cyan);">🦞</div>
-      <h2>Telegram / OpenClaw 整合</h2>
-    </div>
-    <p>Get To It 的晨間簡報不只能在 Claude 桌面 app 看到——你可以讓它主動推送到你的 Telegram，透過 OpenClaw 實現真正的「讓秘書追你」。</p>
-
-    <!-- ClaHub question -->
-    <div style="background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.2);border-radius:14px;padding:20px;margin:20px 0;">
-      <strong style="color:var(--amber);">❓ 能直接從 ClaHub（clawhub.ai）安裝嗎？</strong>
-      <p style="color:var(--text2);font-size:0.84rem;margin-top:10px;line-height:1.8;">
-        <strong style="color:var(--text);">不行，兩個系統格式不同。</strong><br><br>
-        <strong>Get To It</strong> 是一個 <strong style="color:var(--purple);">Claude Cowork Skill</strong>——它存在於 Claude 桌面 App 裡，用 Claude 作為 AI 引擎，透過 SKILL.md 規則控制 AI 行為。<br><br>
-        <strong>ClaHub / OpenClaw</strong> 是<strong style="color:var(--cyan);">另一套獨立的 local AI 平台</strong>，有自己的 Skill 格式、自己的 Gateway 協定和 AI runtime，主要功能是連接 20+ 通訊平台（Telegram、WhatsApp、Slack 等）並在你的設備上本地執行 AI。<br><br>
-        兩個平台的 .skill 格式<strong>不互通</strong>。你無法把 Get To It 的 .skill 檔案安裝到 OpenClaw，反之亦然。
-      </p>
-    </div>
-
-    <!-- How to integrate -->
-    <h3 style="font-size:0.95rem;margin:20px 0 12px;color:var(--text);">✅ 正確的整合方式：CLI Pipe</h3>
-    <p style="color:var(--text2);font-size:0.84rem;margin-bottom:14px;">
-      Get To It 提供 <code style="color:var(--cyan);font-size:0.82rem;">morning --format telegram</code> 指令，輸出 Telegram MarkdownV2 格式的純文字。這個文字可以用任何方式送到你的 Telegram——包括透過 OpenClaw 的 connector，或直接用 Telegram Bot API。
-    </p>
-
-    <div style="display:flex;flex-direction:column;gap:14px;">
-
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;">
-        <div style="font-size:0.78rem;font-weight:700;color:var(--green);margin-bottom:8px;">方式一：最簡單 — 直接用 Telegram Bot API（無需 OpenClaw）</div>
-        <div style="font-family:monospace;font-size:0.73rem;color:#a9b1d6;background:#080a0e;border-radius:8px;padding:12px;line-height:1.8;">
-          <span style="color:var(--text3);"># 1. 先設定環境變數</span><br>
-          export GTI_DB_DIR=~/.get-to-it<br>
-          export TG_BOT_TOKEN="你的 Bot Token"<br>
-          export TG_CHAT_ID="你的 Chat ID"<br><br>
-          <span style="color:var(--text3);"># 2. 每天早上執行這段</span><br>
-          MSG=$(python gti.py morning --format telegram)<br>
-          curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \<br>
-          &nbsp;&nbsp;-d chat_id="$TG_CHAT_ID" \<br>
-          &nbsp;&nbsp;-d parse_mode="MarkdownV2" \<br>
-          &nbsp;&nbsp;-d text="$MSG"<br><br>
-          <span style="color:var(--text3);"># 3. 加入 cron 每天早上 8:30 自動送</span><br>
-          30 8 * * 1-5 cd /path/to/gti &amp;&amp; bash above_script.sh
+      <!-- DAILY FLOW -->
+      <div class="section" id="daily">
+        <div class="section-tag">
+          <div class="section-number sn-green">03</div>
+          <h2>一天的完整使用流程</h2>
         </div>
-        <p style="color:var(--text3);font-size:0.72rem;margin-top:8px;">⚠️ 需要先建立 Telegram Bot（@BotFather）並取得 Token 和 Chat ID。</p>
+        <p>
+          Get To It
+          圍繞著你一天的自然節奏設計，不需要改變習慣——只要在對的時刻跟它說話。
+        </p>
+
+        <div class="workflow">
+          <div class="workflow-step">
+            <div class="step-left">
+              <div
+                class="step-dot"
+                style="
+                  background: rgba(167, 139, 250, 0.15);
+                  color: var(--purple);
+                "
+              >
+                ☀️
+              </div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-content">
+              <div class="step-time" style="color: var(--purple)">
+                早上 · 啟動
+              </div>
+              <div class="step-title">晨間簡報</div>
+              <div class="step-desc">
+                說「早安」或「今天要做什麼」，秘書會問你今天有幾小時，然後從所有目標中挑出今天最重要的三件事，附上理由和時間估計。
+              </div>
+              <div class="chat" style="margin-top: 12px">
+                <div class="chat-title">對話範例 · 晨間簡報</div>
+                <div class="msg">
+                  <div class="msg-avatar av-user">你</div>
+                  <div class="msg-body">
+                    <div class="msg-name nm-user">Yang</div>
+                    <div class="msg-text">早安</div>
+                  </div>
+                </div>
+                <div class="msg">
+                  <div class="msg-avatar av-sec">秘</div>
+                  <div class="msg-body">
+                    <div class="msg-name nm-sec">秘書</div>
+                    <div class="msg-text">
+                      早安 Yang ☀️ 今天有幾小時可以工作？
+                    </div>
+                  </div>
+                </div>
+                <div class="msg">
+                  <div class="msg-avatar av-user">你</div>
+                  <div class="msg-body">
+                    <div class="msg-name nm-user">Yang</div>
+                    <div class="msg-text">大概 4 小時</div>
+                  </div>
+                </div>
+                <div class="msg">
+                  <div class="msg-avatar av-sec">秘</div>
+                  <div class="msg-body">
+                    <div class="msg-name nm-sec">秘書</div>
+                    <div class="msg-text">
+                      昨天你完成了「撰寫 SKILL.md」，做得很好。<br /><br />
+                      今天有 4 小時，我幫你挑了三件最值得做的事：<br /><br />
+                      <span class="hi">1. 📌 測試完整流程</span>（60 分鐘）—
+                      你離「Cowork Skill 整合」完成只差一步了<br />
+                      <span class="hi">2. 🔄 實作優先排序引擎</span>（120
+                      分鐘）— 核心功能，擋住後面兩個任務<br />
+                      <span class="hi">3. ⚡ 實作短期記憶模組</span>（60 分鐘）—
+                      你之前說這個最想做<br /><br />
+                      預計 4 小時，剛好吃滿你今天的時間。從哪一件開始？
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="workflow-step">
+            <div class="step-left">
+              <div
+                class="step-dot"
+                style="background: rgba(96, 165, 250, 0.15); color: var(--blue)"
+              >
+                💡
+              </div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-content">
+              <div class="step-time" style="color: var(--blue)">
+                工作中 · 隨時
+              </div>
+              <div class="step-title">快速捕捉新想法</div>
+              <div class="step-desc">
+                腦子裡突然冒出新想法，直接說。秘書會評估它跟你目前目標的關聯度，決定要不要插進今天的計畫，不讓你被它帶走，也不讓它就這樣消失。
+              </div>
+              <div class="chat" style="margin-top: 12px">
+                <div class="chat-title">對話範例 · 想法捕捉</div>
+                <div class="msg">
+                  <div class="msg-avatar av-user">你</div>
+                  <div class="msg-body">
+                    <div class="msg-name nm-user">Yang</div>
+                    <div class="msg-text">
+                      我突然覺得應該做一個播客介紹 AI 工具
+                    </div>
+                  </div>
+                </div>
+                <div class="msg">
+                  <div class="msg-avatar av-sec">秘</div>
+                  <div class="msg-body">
+                    <div class="msg-name nm-sec">秘書</div>
+                    <div class="msg-text">
+                      這個想法我記下來了，跟你現在的「建立 Get To It
+                      MVP」目標關聯度大概
+                      <span class="warn">20%</span>，先放進想法庫。<br />
+                      你現在最重要的事還是<span class="em"
+                        >「測試完整流程」</span
+                      >，繼續吧！
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="workflow-step">
+            <div class="step-left">
+              <div
+                class="step-dot"
+                style="
+                  background: rgba(52, 211, 153, 0.15);
+                  color: var(--green);
+                "
+              >
+                ✅
+              </div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-content">
+              <div class="step-time" style="color: var(--green)">
+                完成任務後
+              </div>
+              <div class="step-title">標記完成，前進下一步</div>
+              <div class="step-desc">
+                告訴秘書你完成了某件事。它會記錄、更新進度，然後告訴你下一步是什麼。不囉嗦，一句慶祝，直接繼續。
+              </div>
+            </div>
+          </div>
+
+          <div class="workflow-step">
+            <div class="step-left">
+              <div
+                class="step-dot"
+                style="
+                  background: rgba(251, 191, 36, 0.15);
+                  color: var(--amber);
+                "
+              >
+                ⏭
+              </div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-content">
+              <div class="step-time" style="color: var(--amber)">
+                卡住的時候
+              </div>
+              <div class="step-title">跳過任務（說原因）</div>
+              <div class="step-desc">
+                不想做某件事，跳過沒關係。說個原因，秘書會記住 14
+                天。如果同一件事跳過三次，它會主動問你：是任務太大？卡在哪裡？還是不想做了？
+              </div>
+            </div>
+          </div>
+
+          <div class="workflow-step">
+            <div class="step-left">
+              <div
+                class="step-dot"
+                style="
+                  background: rgba(251, 146, 60, 0.15);
+                  color: var(--orange);
+                "
+              >
+                🌙
+              </div>
+              <div class="step-line" style="background: transparent"></div>
+            </div>
+            <div class="step-content">
+              <div class="step-time" style="color: var(--orange)">收工前</div>
+              <div class="step-title">每日收工回顧</div>
+              <div class="step-desc">
+                說「收工」，秘書會回顧今天做了什麼、問你今天感覺如何（🔥 / 😐 /
+                😴），然後預告明天的 Top 3。這個 emoji
+                回報是動量追蹤的核心資料。
+              </div>
+              <div class="chat" style="margin-top: 12px">
+                <div class="chat-title">對話範例 · 每日收工</div>
+                <div class="msg">
+                  <div class="msg-avatar av-user">你</div>
+                  <div class="msg-body">
+                    <div class="msg-name nm-user">Yang</div>
+                    <div class="msg-text">收工</div>
+                  </div>
+                </div>
+                <div class="msg">
+                  <div class="msg-avatar av-sec">秘</div>
+                  <div class="msg-body">
+                    <div class="msg-name nm-sec">秘書</div>
+                    <div class="msg-text">
+                      今天你完成了：<br />
+                      <span class="hi">✅ 測試完整流程</span><br />
+                      <span class="hi">✅ 實作優先排序引擎</span><br /><br />
+                      Get To It MVP 現在完成了
+                      <span class="hi">62%</span>，很有進展！<br /><br />
+                      今天整體感覺如何？<span class="hi">🔥 很順</span> /
+                      <span class="warn">😐 普通</span> / 😴 沒動力
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;">
-        <div style="font-size:0.78rem;font-weight:700;color:var(--cyan);margin-bottom:8px;">方式二：透過 OpenClaw（已安裝 OpenClaw 的用戶）</div>
-        <p style="color:var(--text2);font-size:0.78rem;margin-bottom:8px;">OpenClaw 提供 Telegram connector，你可以建立一個 OpenClaw skill 或 cron job，定期呼叫 gti.py 並將輸出透過 OpenClaw 的 connector 送到 Telegram。</p>
-        <div style="font-family:monospace;font-size:0.73rem;color:#a9b1d6;background:#080a0e;border-radius:8px;padding:12px;line-height:1.8;">
-          <span style="color:var(--text3);"># OpenClaw cron skill 範例（概念）</span><br>
-          python gti.py morning --format telegram | openclaw send --channel telegram --chat YOUR_CHAT
+      <div class="divider"></div>
+
+      <!-- COMMANDS -->
+      <div class="section" id="commands">
+        <div class="section-tag">
+          <div class="section-number sn-amber">04</div>
+          <h2>完整指令總覽</h2>
         </div>
-        <p style="color:var(--text3);font-size:0.72rem;margin-top:8px;">具體 OpenClaw API 語法請參考 <a href="https://github.com/openclaw/openclaw" style="color:var(--cyan);">OpenClaw 官方文件</a>。</p>
+        <p>
+          不需要記憶指令格式，直接用自然語言說就好。以下是你可以說的所有觸發語和對應功能：
+        </p>
+
+        <table class="cmd-table">
+          <thead>
+            <tr>
+              <th>你說的</th>
+              <th>功能</th>
+              <th>觸發關鍵字</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="cmd">早安 / 今天要做什麼</span></td>
+              <td class="cmd-desc">晨間簡報，今日 Top 3 + 動量摘要</td>
+              <td class="cmd-trigger">早安, morning, 今天, 要做什麼</td>
+            </tr>
+            <tr>
+              <td><span class="cmd">我想做 [目標]</span></td>
+              <td class="cmd-desc">新增目標，AI 幫你拆解成專案和任務</td>
+              <td class="cmd-trigger">目標, 新增, 我想, 計畫</td>
+            </tr>
+            <tr>
+              <td><span class="cmd">新增任務 [描述]</span></td>
+              <td class="cmd-desc">新增單一任務到指定專案</td>
+              <td class="cmd-trigger">新增任務, 加一個</td>
+            </tr>
+            <tr>
+              <td><span class="cmd">完成了 [任務]</span></td>
+              <td class="cmd-desc">標記任務完成，更新進度</td>
+              <td class="cmd-trigger">完成, 做完, done</td>
+            </tr>
+            <tr>
+              <td><span class="cmd">跳過這個，因為 [原因]</span></td>
+              <td class="cmd-desc">跳過任務，原因存入 14 天記憶</td>
+              <td class="cmd-trigger">跳過, 不做, skip</td>
+            </tr>
+            <tr>
+              <td><span class="cmd">進度怎麼樣了</span></td>
+              <td class="cmd-desc">查看所有目標進度 + 動量時間軸</td>
+              <td class="cmd-trigger">進度, 動量, review, 我做了什麼</td>
+            </tr>
+            <tr>
+              <td><span class="cmd">[任何想法]</span></td>
+              <td class="cmd-desc">自動評估與目標關聯度，分類存入想法庫</td>
+              <td class="cmd-trigger">我突然想, 我覺得應該, 有個想法</td>
+            </tr>
+            <tr>
+              <td><span class="cmd">看看想法庫</span></td>
+              <td class="cmd-desc">查看所有捕捉到的想法，決定要不要排進來</td>
+              <td class="cmd-trigger">想法庫, idea bank, 之前的想法</td>
+            </tr>
+            <tr>
+              <td><span class="cmd">收工 / 結束</span></td>
+              <td class="cmd-desc">每日收工回顧 + 心情記錄 + 明日預告</td>
+              <td class="cmd-trigger">收工, 結束, eod, 今天就到這裡</td>
+            </tr>
+            <tr>
+              <td><span class="cmd">這個交給 AI 做</span></td>
+              <td class="cmd-desc">將任務分配給 Agent，進入人機協作清單</td>
+              <td class="cmd-trigger">交給 AI, agent, 自動</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="warn-box">
+          <strong>不需要記這些</strong>：Get To It
+          的設計原則是零學習成本。你說什麼，它都能理解。上面的觸發關鍵字只是幫助你了解系統能做什麼。
+        </div>
       </div>
 
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;">
-        <div style="font-size:0.78rem;font-weight:700;color:var(--amber);margin-bottom:8px;">方式三（未來規劃）— HTTP Webhook Server</div>
-        <p style="color:var(--text2);font-size:0.78rem;margin-bottom:8px;">未來版本計畫在 gti.py 中加入 <code style="color:var(--cyan);">serve --port 8080</code> 模式，開啟輕量 HTTP 伺服器，讓 OpenClaw 或任何 webhook 工具可以直接輪詢取得晨間資料，無需 shell 整合。</p>
-        <div style="font-family:monospace;font-size:0.73rem;color:#4b5563;background:#080a0e;border-radius:8px;padding:12px;line-height:1.8;">
-          <span style="color:var(--text3);"># 尚未實作</span><br>
-          python gti.py serve --port 8080<br>
-          GET http://localhost:8080/morning?format=telegram
+      <div class="divider"></div>
+
+      <!-- PERSONA -->
+      <div class="section" id="persona">
+        <div class="section-tag">
+          <div class="section-number sn-rose">05</div>
+          <h2>秘書人格系統</h2>
+        </div>
+        <p>
+          這是 Get To It
+          最特別的地方之一。秘書不是固定語氣，它會根據你最近的狀態動態調整：
+        </p>
+
+        <div class="persona-row pr-normal">
+          <div class="persona-emoji">😊</div>
+          <div class="persona-content">
+            <div class="persona-label pl-normal">日常模式 — 你有在穩定前進</div>
+            <div class="persona-cond">觸發條件：今天或昨天有完成任務</div>
+            <div class="persona-example">
+              「昨天你完成了三個任務，動力不錯！今天我幫你挑了……」溫柔、支持、慶祝小進步。
+            </div>
+          </div>
+        </div>
+
+        <div class="persona-row pr-nudge">
+          <div class="persona-emoji">🌤</div>
+          <div class="persona-content">
+            <div class="persona-label pl-nudge">溫柔提醒 — 停滯 1-2 天</div>
+            <div class="persona-cond">觸發條件：1-2 天沒有任何任務完成</div>
+            <div class="persona-example">
+              「昨天好像沒有動到什麼，沒事的。不過有幾件事在等你……今天哪怕只花
+              20 分鐘推一件，都是前進。」
+            </div>
+          </div>
+        </div>
+
+        <div class="persona-row pr-push">
+          <div class="persona-emoji">⚡</div>
+          <div class="persona-content">
+            <div class="persona-label pl-push">認真施壓 — 停滯 3 天以上</div>
+            <div class="persona-cond">觸發條件：連續 3 天以上沒有實質進展</div>
+            <div class="persona-example">
+              「Yang，我要認真跟你說了。你已經四天沒有進展了。今天不需要做完什麼大事，但你必須動一下。告訴我能做的最小那一步是什麼？」
+            </div>
+          </div>
+        </div>
+
+        <div class="tip" style="margin-top: 20px">
+          <strong>記憶加持</strong
+          >：如果你昨天說「頭痛先不碰這個」，今天即使是施壓模式，秘書也不會推這個任務。它記得你說過的話。
         </div>
       </div>
 
+      <div class="divider"></div>
+
+      <!-- WHY -->
+      <div class="section" id="why">
+        <div class="section-tag">
+          <div class="section-number sn-cyan">06</div>
+          <h2>過人之處——跟其他工具的差異</h2>
+        </div>
+        <p>
+          市面上的 Motion、Notion、ClickUp
+          等工具都假設你是有紀律的人，只需要更好的組織方式。Get To It
+          針對的是不同的人——
+        </p>
+
+        <div class="diff-grid">
+          <div class="diff-item">
+            <div class="diff-badge db-star">★ 市場唯一</div>
+            <div class="diff-title">動力感知優先排序</div>
+            <div class="diff-desc">
+              所有工具都假設你每天都是「就緒狀態」。Get To It
+              把你當前的動力和可用時間列為優先排序的核心因素。新想法出現的那一刻動力最高——它知道。
+            </div>
+          </div>
+          <div class="diff-item">
+            <div class="diff-badge db-star">★ 情緒護城河</div>
+            <div class="diff-title">溫柔但施壓的秘書人格</div>
+            <div class="diff-desc">
+              Duolingo
+              貓頭鷹的生產力版本。有個性的提醒比冷冰冰的通知有效十倍。沒有任何生產力工具在做這件事。
+            </div>
+          </div>
+          <div class="diff-item">
+            <div class="diff-badge db-star">★ 業界首創</div>
+            <div class="diff-title">人機協作清單</div>
+            <div class="diff-desc">
+              任務可以在你和 AI Agent 之間流動。你做決策，Agent
+              執行，清單統一追蹤。Taskade 有 AI
+              agents，但它是團隊工具，不是個人秘書。
+            </div>
+          </div>
+          <div class="diff-item">
+            <div class="diff-badge db-star">★ 防分心核心</div>
+            <div class="diff-title">想法庫 + 關聯度評估</div>
+            <div class="diff-desc">
+              新想法出現時，現有工具要麼讓你忽略它，要麼讓你被帶走。Get To It
+              第三條路：立即評估、智慧分類、延後處理，動力保留，主線不斷。
+            </div>
+          </div>
+          <div class="diff-item">
+            <div class="diff-badge db-star">★ 越用越懂你</div>
+            <div class="diff-title">14 天滾動記憶</div>
+            <div class="diff-desc">
+              你給的每個跳過原因、每個情緒標記，系統都記得 14
+              天。一個不記得你昨天說什麼的秘書，不是好秘書。
+            </div>
+          </div>
+          <div class="diff-item">
+            <div class="diff-badge db-star">★ 動量思維</div>
+            <div class="diff-title">節奏視覺化而非百分比</div>
+            <div class="diff-desc">
+              「你完成了 60%」沒什麼感覺。「你最近 7
+              天：🔥🔥😐🔥🔥😴🔥，動量指數 72，趨勢加速中」——這個你感覺得到。
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 36px">一句話說清楚：</h3>
+        <div
+          style="
+            border: 1px solid var(--border2);
+            border-radius: 14px;
+            padding: 24px;
+            background: var(--bg2);
+            text-align: center;
+            margin-top: 12px;
+          "
+        >
+          <p
+            style="
+              font-size: 1.05rem;
+              color: var(--text);
+              line-height: 1.7;
+              margin: 0;
+            "
+          >
+            其他工具幫助<strong style="color: var(--text)"
+              >「已經有紀律的人更有效率」</strong
+            >。<br />
+            Get To It 幫助<strong style="color: var(--purple)"
+              >「有動力但容易走偏的人找到方向並堅持走下去」</strong
+            >。
+          </p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- TIPS -->
+      <div class="section">
+        <div class="section-tag">
+          <div class="section-number sn-orange">07</div>
+          <h2>MVP 使用小技巧</h2>
+        </div>
+
+        <h3>🎯 第一次用：從一個目標開始</h3>
+        <p>
+          不要一次把所有目標都輸入進去。挑一個你現在最在乎的目標，讓秘書幫你拆解成具體任務，用一週看看。
+        </p>
+
+        <h3>⏱ 每天說「今天有幾小時」</h3>
+        <p>
+          這一個動作讓優先排序算法有時間感知，推給你的任務才會真的適合今天。
+        </p>
+
+        <h3>🔥 收工前記得回報 emoji</h3>
+        <p>
+          🔥 / 😐 / 😴
+          這三個心情回報是動量追蹤的核心。持續兩週，系統就能畫出你真實的工作節奏曲線。
+        </p>
+
+        <h3>💡 有想法就直接說</h3>
+        <p>
+          不需要先判斷「這個值不值得記錄」。直接說，秘書幫你判斷。讓你的腦子只負責想，不負責整理。
+        </p>
+
+        <h3>📝 跳過任務時一定給原因</h3>
+        <p>
+          「跳過，因為今天沒時間」這個原因存入記憶後，秘書明天會幫你考慮時間因素。沒有原因的跳過，系統只能猜。
+        </p>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- V2 FEATURES -->
+      <div class="section" id="v2">
+        <div class="section-tag">
+          <div
+            class="section-number"
+            style="background: rgba(251, 191, 36, 0.1); color: var(--amber)"
+          >
+            V2
+          </div>
+          <h2>V2 新功能詳解</h2>
+        </div>
+        <p>
+          V2
+          版本新增了五個模組，讓系統從「好用」升級到「越用越懂你」。以下是每個功能的使用方式。
+        </p>
+
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 24px;
+          "
+        >
+          <!-- P1a: Time Tracking -->
+          <div
+            style="
+              background: var(--bg2);
+              border: 1px solid var(--border);
+              border-radius: 16px;
+              padding: 22px;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 10px;
+              "
+            >
+              <span style="font-size: 1.2rem">⏱️</span>
+              <strong style="color: var(--text); font-size: 0.95rem"
+                >時間追蹤 &amp; 預測校準</strong
+              >
+              <span
+                style="
+                  font-size: 0.65rem;
+                  background: rgba(96, 165, 250, 0.1);
+                  border: 1px solid rgba(96, 165, 250, 0.3);
+                  color: var(--blue);
+                  padding: 2px 8px;
+                  border-radius: 10px;
+                  font-weight: 700;
+                "
+                >V2 P1</span
+              >
+            </div>
+            <p
+              style="
+                color: var(--text2);
+                font-size: 0.84rem;
+                margin-bottom: 12px;
+              "
+            >
+              開始任務前用「開始做」，完成後用「做完了」——系統自動計時。做越多次同類型任務，預測越準。
+            </p>
+            <div class="chat" style="margin-top: 0">
+              <div class="chat-title">對話範例</div>
+              <div class="msg">
+                <div class="msg-avatar av-user">你</div>
+                <div class="msg-body">
+                  <div class="msg-name nm-user">Yang</div>
+                  <div class="msg-text">我要開始做任務 #3 了</div>
+                </div>
+              </div>
+              <div class="msg">
+                <div class="msg-avatar av-sec">秘</div>
+                <div class="msg-body">
+                  <div class="msg-name nm-sec">秘書</div>
+                  <div class="msg-text">好，計時開始 🟢 加油！</div>
+                </div>
+              </div>
+              <div class="msg">
+                <div class="msg-avatar av-user">你</div>
+                <div class="msg-body">
+                  <div class="msg-name nm-user">Yang</div>
+                  <div class="msg-text">做完了</div>
+                </div>
+              </div>
+              <div class="msg">
+                <div class="msg-avatar av-sec">秘</div>
+                <div class="msg-body">
+                  <div class="msg-name nm-sec">秘書</div>
+                  <div class="msg-text">
+                    完成 ✅ 實際用了 <span class="hi">47 分鐘</span>（估計 60
+                    分鐘，你這次快了一點）。下次同類任務我幫你校正到 50 分鐘。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- P1b: Calendar -->
+          <div
+            style="
+              background: var(--bg2);
+              border: 1px solid var(--border);
+              border-radius: 16px;
+              padding: 22px;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 10px;
+              "
+            >
+              <span style="font-size: 1.2rem">📅</span>
+              <strong style="color: var(--text); font-size: 0.95rem"
+                >行事曆整合（iCal）</strong
+              >
+              <span
+                style="
+                  font-size: 0.65rem;
+                  background: rgba(96, 165, 250, 0.1);
+                  border: 1px solid rgba(96, 165, 250, 0.3);
+                  color: var(--blue);
+                  padding: 2px 8px;
+                  border-radius: 10px;
+                  font-weight: 700;
+                "
+                >V2 P1</span
+              >
+            </div>
+            <p
+              style="
+                color: var(--text2);
+                font-size: 0.84rem;
+                margin-bottom: 10px;
+              "
+            >
+              連結 Google Calendar 或 Apple Calendar 的 .ics
+              訂閱連結，晨間簡報自動抓取今天行程並算出真正的空閒時間。
+            </p>
+            <div
+              style="
+                background: rgba(255, 255, 255, 0.02);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                padding: 12px;
+                font-size: 0.78rem;
+                color: var(--text2);
+              "
+            >
+              <strong style="color: var(--cyan)"
+                >如何連結 Google Calendar：</strong
+              ><br />
+              1. Google Calendar → 設定 → 找到你的行事曆 → 「整合行事曆」→ 複製
+              <strong>iCal 格式</strong> 的訂閱連結<br />
+              2. 告訴秘書：「幫我連結行事曆，連結是 <em>[你的 URL]</em>」<br />
+              3. 之後每天早上，系統自動抓取並計算今天空閒時間
+            </div>
+            <div class="tip" style="margin-top: 10px">
+              <strong>注意</strong>：iCal
+              訂閱連結通常包含私人金鑰，請勿在公開場合分享。
+            </div>
+          </div>
+
+          <!-- P2a: Long-term Memory -->
+          <div
+            style="
+              background: var(--bg2);
+              border: 1px solid var(--border);
+              border-radius: 16px;
+              padding: 22px;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 10px;
+              "
+            >
+              <span style="font-size: 1.2rem">🧠</span>
+              <strong style="color: var(--text); font-size: 0.95rem"
+                >語意長期記憶</strong
+              >
+              <span
+                style="
+                  font-size: 0.65rem;
+                  background: rgba(167, 139, 250, 0.1);
+                  border: 1px solid rgba(167, 139, 250, 0.3);
+                  color: var(--purple);
+                  padding: 2px 8px;
+                  border-radius: 10px;
+                  font-weight: 700;
+                "
+                >V2 P2</span
+              >
+            </div>
+            <p
+              style="
+                color: var(--text2);
+                font-size: 0.84rem;
+                margin-bottom: 12px;
+              "
+            >
+              和短期記憶（14 天自動過期）不同，長期記憶<strong
+                style="color: var(--text)"
+                >永久保存</strong
+              >，並且有語意搜尋能力——你跟它說的重要事情，以後的早間簡報會自動在相關時刻提起。
+            </p>
+            <div class="chat">
+              <div class="chat-title">對話範例</div>
+              <div class="msg">
+                <div class="msg-avatar av-user">你</div>
+                <div class="msg-body">
+                  <div class="msg-name nm-user">Yang</div>
+                  <div class="msg-text">
+                    我最有效率的時間是早上 9-11 點，下午很容易分心
+                  </div>
+                </div>
+              </div>
+              <div class="msg">
+                <div class="msg-avatar av-sec">秘</div>
+                <div class="msg-body">
+                  <div class="msg-name nm-sec">秘書</div>
+                  <div class="msg-text">
+                    好，我記下來了 🧠
+                    以後早間簡報會幫你把最需要專注的任務排在早上。
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p
+              style="font-size: 0.78rem; color: var(--text2); margin-top: 10px"
+            >
+              秘書會自動存入重要的個人偏好、限制、洞察——你不需要手動說「記住這件事」。
+            </p>
+          </div>
+
+          <!-- P2b: Agent Monitoring -->
+          <div
+            style="
+              background: var(--bg2);
+              border: 1px solid var(--border);
+              border-radius: 16px;
+              padding: 22px;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 10px;
+              "
+            >
+              <span style="font-size: 1.2rem">🤖</span>
+              <strong style="color: var(--text); font-size: 0.95rem"
+                >Agent 任務監控 &amp; 失敗恢復</strong
+              >
+              <span
+                style="
+                  font-size: 0.65rem;
+                  background: rgba(167, 139, 250, 0.1);
+                  border: 1px solid rgba(167, 139, 250, 0.3);
+                  color: var(--purple);
+                  padding: 2px 8px;
+                  border-radius: 10px;
+                  font-weight: 700;
+                "
+                >V2 P2</span
+              >
+            </div>
+            <p
+              style="
+                color: var(--text2);
+                font-size: 0.84rem;
+                margin-bottom: 12px;
+              "
+            >
+              交給 AI Agent 執行的任務會被持續監控。超過
+              <strong style="color: var(--text)">30 分鐘沒有回應</strong
+              >，系統自動標記為失敗並在早間簡報中提醒你。
+            </p>
+            <div class="chat">
+              <div class="chat-title">Agent 任務失敗範例</div>
+              <div class="msg">
+                <div class="msg-avatar av-sec">秘</div>
+                <div class="msg-body">
+                  <div class="msg-name nm-sec">秘書</div>
+                  <div class="msg-text">
+                    ⚠️ 有一個 Agent 任務出問題了：<span class="hi"
+                      >#5 分析競品資料</span
+                    >（已超過 30 分鐘無回應）。要<span class="em">重新嘗試</span
+                    >，還是<span class="warn">改由你自己來做</span>？
+                  </div>
+                </div>
+              </div>
+              <div class="msg">
+                <div class="msg-avatar av-user">你</div>
+                <div class="msg-body">
+                  <div class="msg-name nm-user">Yang</div>
+                  <div class="msg-text">重新嘗試吧</div>
+                </div>
+              </div>
+              <div class="msg">
+                <div class="msg-avatar av-sec">秘</div>
+                <div class="msg-body">
+                  <div class="msg-name nm-sec">秘書</div>
+                  <div class="msg-text">
+                    好，已重新派發給 Agent。現在來看今天的 Top 3⋯⋯
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- P3a: ML Weights -->
+          <div
+            style="
+              background: var(--bg2);
+              border: 1px solid var(--border);
+              border-radius: 16px;
+              padding: 22px;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 10px;
+              "
+            >
+              <span style="font-size: 1.2rem">🎓</span>
+              <strong style="color: var(--text); font-size: 0.95rem"
+                >ML 優先排序自學習</strong
+              >
+              <span
+                style="
+                  font-size: 0.65rem;
+                  background: rgba(251, 191, 36, 0.1);
+                  border: 1px solid rgba(251, 191, 36, 0.3);
+                  color: var(--amber);
+                  padding: 2px 8px;
+                  border-radius: 10px;
+                  font-weight: 700;
+                "
+                >V2 P3</span
+              >
+            </div>
+            <p
+              style="
+                color: var(--text2);
+                font-size: 0.84rem;
+                margin-bottom: 12px;
+              "
+            >
+              系統默默觀察你<strong style="color: var(--text)"
+                >每天真正完成哪些推薦任務</strong
+              >，累積夠多資料後（約 10 天），用機器學習調整優先排序的權重，讓
+              Top 3 越來越符合你的實際行為。
+            </p>
+            <div class="tip">
+              <strong>不需要任何操作</strong
+              >：記錄是自動的。你只要持續正常使用，系統就會自我優化。如果好奇目前狀態，可以問秘書「現在的排序是默認還是已學習的？」
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- OPENCLAW SECTION -->
+      <div class="section" id="openclaw">
+        <div class="section-tag">
+          <div
+            class="section-number"
+            style="background: rgba(34, 211, 238, 0.1); color: var(--cyan)"
+          >
+            🦞
+          </div>
+          <h2>Telegram / OpenClaw 整合</h2>
+        </div>
+        <p>
+          Get To It 的晨間簡報不只能在 Claude 桌面 app
+          看到——你可以讓它主動推送到你的 Telegram，透過 OpenClaw
+          實現真正的「讓秘書追你」。
+        </p>
+
+        <!-- ClawHub question -->
+        <div
+          style="
+            background: rgba(251, 191, 36, 0.05);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 14px;
+            padding: 20px;
+            margin: 20px 0;
+          "
+        >
+          <strong style="color: var(--amber)"
+            >❓ 能直接從 ClawHub（clawhub.ai）安裝嗎？</strong
+          >
+          <p
+            style="
+              color: var(--text2);
+              font-size: 0.84rem;
+              margin-top: 10px;
+              line-height: 1.8;
+            "
+          >
+            <strong style="color: var(--text)">不行，兩個系統格式不同。</strong
+            ><br /><br />
+            <strong>Get To It</strong> 是一個
+            <strong style="color: var(--purple)">Claude Cowork Skill</strong
+            >——它存在於 Claude 桌面 App 裡，用 Claude 作為 AI 引擎，透過
+            SKILL.md 規則控制 AI 行為。<br /><br />
+            <strong>ClawHub / OpenClaw</strong> 是<strong
+              style="color: var(--cyan)"
+              >另一套獨立的 local AI 平台</strong
+            >，有自己的 Skill 格式、自己的 Gateway 協定和 AI
+            runtime，主要功能是連接 20+ 通訊平台（Telegram、WhatsApp、Slack
+            等）並在你的設備上本地執行 AI。<br /><br />
+            兩個平台的 .skill 格式<strong>不互通</strong>。你無法把 Get To It 的
+            .skill 檔案安裝到 OpenClaw，反之亦然。
+          </p>
+        </div>
+
+        <!-- How to integrate -->
+        <h3 style="font-size: 0.95rem; margin: 20px 0 12px; color: var(--text)">
+          ✅ 正確的整合方式：CLI Pipe
+        </h3>
+        <p style="color: var(--text2); font-size: 0.84rem; margin-bottom: 14px">
+          Get To It 提供
+          <code style="color: var(--cyan); font-size: 0.82rem"
+            >morning --format telegram</code
+          >
+          指令，輸出 Telegram MarkdownV2
+          格式的純文字。這個文字可以用任何方式送到你的 Telegram——包括透過
+          OpenClaw 的 connector，或直接用 Telegram Bot API。
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 14px">
+          <div
+            style="
+              background: var(--bg2);
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              padding: 16px;
+            "
+          >
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: var(--green);
+                margin-bottom: 8px;
+              "
+            >
+              方式一：最簡單 — 直接用 Telegram Bot API（無需 OpenClaw）
+            </div>
+            <div
+              style="
+                font-family: monospace;
+                font-size: 0.73rem;
+                color: #a9b1d6;
+                background: #080a0e;
+                border-radius: 8px;
+                padding: 12px;
+                line-height: 1.8;
+              "
+            >
+              <span style="color: var(--text3)"># 1. 先設定環境變數</span><br />
+              export GTI_DB_DIR=~/.get-to-it<br />
+              export TG_BOT_TOKEN="你的 Bot Token"<br />
+              export TG_CHAT_ID="你的 Chat ID"<br /><br />
+              <span style="color: var(--text3)"># 2. 每天早上執行這段</span
+              ><br />
+              MSG=$(python gti.py morning --format telegram)<br />
+              curl -s -X POST
+              "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \<br />
+              &nbsp;&nbsp;-d chat_id="$TG_CHAT_ID" \<br />
+              &nbsp;&nbsp;-d parse_mode="MarkdownV2" \<br />
+              &nbsp;&nbsp;-d text="$MSG"<br /><br />
+              <span style="color: var(--text3)"
+                ># 3. 加入 cron 每天早上 8:30 自動送</span
+              ><br />
+              30 8 * * 1-5 cd /path/to/gti &amp;&amp; bash above_script.sh
+            </div>
+            <p style="color: var(--text3); font-size: 0.72rem; margin-top: 8px">
+              ⚠️ 需要先建立 Telegram Bot（@BotFather）並取得 Token 和 Chat ID。
+            </p>
+          </div>
+
+          <div
+            style="
+              background: var(--bg2);
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              padding: 16px;
+            "
+          >
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: var(--cyan);
+                margin-bottom: 8px;
+              "
+            >
+              方式二：透過 OpenClaw（已安裝 OpenClaw 的用戶）
+            </div>
+            <p
+              style="
+                color: var(--text2);
+                font-size: 0.78rem;
+                margin-bottom: 8px;
+              "
+            >
+              OpenClaw 提供 Telegram connector，你可以建立一個 OpenClaw skill 或
+              cron job，定期呼叫 gti.py 並將輸出透過 OpenClaw 的 connector 送到
+              Telegram。
+            </p>
+            <div
+              style="
+                font-family: monospace;
+                font-size: 0.73rem;
+                color: #a9b1d6;
+                background: #080a0e;
+                border-radius: 8px;
+                padding: 12px;
+                line-height: 1.8;
+              "
+            >
+              <span style="color: var(--text3)"
+                ># OpenClaw cron skill 範例（概念）</span
+              ><br />
+              python gti.py morning --format telegram | openclaw send --channel
+              telegram --chat YOUR_CHAT
+            </div>
+            <p style="color: var(--text3); font-size: 0.72rem; margin-top: 8px">
+              具體 OpenClaw API 語法請參考
+              <a
+                href="https://github.com/openclaw/openclaw"
+                style="color: var(--cyan)"
+                >OpenClaw 官方文件</a
+              >。
+            </p>
+          </div>
+
+          <div
+            style="
+              background: var(--bg2);
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              padding: 16px;
+            "
+          >
+            <div
+              style="
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: var(--amber);
+                margin-bottom: 8px;
+              "
+            >
+              方式三（未來規劃）— HTTP Webhook Server
+            </div>
+            <p
+              style="
+                color: var(--text2);
+                font-size: 0.78rem;
+                margin-bottom: 8px;
+              "
+            >
+              未來版本計畫在 gti.py 中加入
+              <code style="color: var(--cyan)">serve --port 8080</code>
+              模式，開啟輕量 HTTP 伺服器，讓 OpenClaw 或任何 webhook
+              工具可以直接輪詢取得晨間資料，無需 shell 整合。
+            </p>
+            <div
+              style="
+                font-family: monospace;
+                font-size: 0.73rem;
+                color: #4b5563;
+                background: #080a0e;
+                border-radius: 8px;
+                padding: 12px;
+                line-height: 1.8;
+              "
+            >
+              <span style="color: var(--text3)"># 尚未實作</span><br />
+              python gti.py serve --port 8080<br />
+              GET http://localhost:8080/morning?format=telegram
+            </div>
+          </div>
+        </div>
+
+        <div class="tip" style="margin-top: 16px">
+          <strong>推薦做法（現在就能用）</strong>：方式一最簡單，5
+          分鐘可完成設定。有在用 OpenClaw 的話，方式二更優雅——OpenClaw 幫你管理
+          Telegram 連線，不需要自己處理 Bot API。
+        </div>
+
+        <!-- Sample Telegram output -->
+        <h3 style="font-size: 0.95rem; margin: 22px 0 12px; color: var(--text)">
+          📱 Telegram 輸出預覽
+        </h3>
+        <div
+          style="
+            background: #1a1f2e;
+            border: 1px solid #2a3441;
+            border-radius: 14px;
+            padding: 18px;
+            font-family: &quot;SF Pro Text&quot;, sans-serif;
+            font-size: 0.84rem;
+            line-height: 1.8;
+            max-width: 380px;
+          "
+        >
+          <div style="color: #a78bfa; font-weight: 700">
+            🌅 早安！2026-04-01 (Wednesday)
+          </div>
+          <div style="color: #94a3b8">
+            ⏰ 今天可用時間：<strong style="color: #e2e8f0">4.0 小時</strong>
+          </div>
+          <div style="color: #94a3b8">📅 今天有 2 個行程</div>
+          <br />
+          <div style="color: #e2e8f0; font-weight: 700">📋 今日 Top 3</div>
+          <div style="color: #e2e8f0">
+            1. ⚡ <strong>完成 API 設計文件</strong> (~60分鐘)
+          </div>
+          <div
+            style="
+              color: #94a3b8;
+              font-style: italic;
+              font-size: 0.78rem;
+              padding-left: 16px;
+            "
+          >
+            💭 你之前說過文件寫得清楚比寫得快更重要
+          </div>
+          <div style="color: #e2e8f0">
+            2. 📌 <strong>修復登入 bug</strong> (~45分鐘)
+          </div>
+          <div style="color: #e2e8f0">
+            3. 🔄 <strong>Review PR #12</strong> (~30分鐘)
+          </div>
+          <br />
+          <div style="color: #94a3b8">⏱ Top 3 預估合計：2小時15分</div>
+          <br />
+          <div style="color: #6b7280">從哪一件開始？回覆任務編號即可 🚀</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- TIPS -->
+      <div class="section">
+        <div class="section-tag">
+          <div class="section-number sn-orange">08</div>
+          <h2>V2 使用小技巧</h2>
+        </div>
+
+        <h3>🏃 先計時再說「做完了」</h3>
+        <p>
+          說「開始做任務
+          #N」才能啟動自動計時。直接說「做完了」系統只能接受手動分鐘數。一個月後你會看到每類任務的真實時間分佈。
+        </p>
+
+        <h3>🧠 把重要限制說出來</h3>
+        <p>
+          「我每週三下午要接小孩」「這個月預算很緊」「我討厭整理
+          Excel」——這些說了，秘書就永遠記住，不需要每次提醒。
+        </p>
+
+        <h3>📱 接 Telegram 後不用每天開 Claude</h3>
+        <p>
+          連結 Telegram 之後，早上 8:30
+          晨間簡報就自動送達你的手機。你只需要在想深入討論任務或捕捉想法時才打開桌面
+          app。
+        </p>
+
+        <h3>🤖 不用擔心 Agent 任務卡住</h3>
+        <p>
+          交出去的任務系統會監控。超過 30
+          分鐘沒動靜，下次早間簡報就會告訴你，直接說「重試」或「我自己來」。
+        </p>
+      </div>
     </div>
 
-    <div class="tip" style="margin-top:16px;">
-      <strong>推薦做法（現在就能用）</strong>：方式一最簡單，5 分鐘可完成設定。有在用 OpenClaw 的話，方式二更優雅——OpenClaw 幫你管理 Telegram 連線，不需要自己處理 Bot API。
-    </div>
-
-    <!-- Sample Telegram output -->
-    <h3 style="font-size:0.95rem;margin:22px 0 12px;color:var(--text);">📱 Telegram 輸出預覽</h3>
-    <div style="background:#1a1f2e;border:1px solid #2a3441;border-radius:14px;padding:18px;font-family:'SF Pro Text',sans-serif;font-size:0.84rem;line-height:1.8;max-width:380px;">
-      <div style="color:#a78bfa;font-weight:700;">🌅 早安！2026-04-01 (Wednesday)</div>
-      <div style="color:#94a3b8;">⏰ 今天可用時間：<strong style="color:#e2e8f0;">4.0 小時</strong></div>
-      <div style="color:#94a3b8;">📅 今天有 2 個行程</div>
-      <br>
-      <div style="color:#e2e8f0;font-weight:700;">📋 今日 Top 3</div>
-      <div style="color:#e2e8f0;">1. ⚡ <strong>完成 API 設計文件</strong> (~60分鐘)</div>
-      <div style="color:#94a3b8;font-style:italic;font-size:0.78rem;padding-left:16px;">💭 你之前說過文件寫得清楚比寫得快更重要</div>
-      <div style="color:#e2e8f0;">2. 📌 <strong>修復登入 bug</strong> (~45分鐘)</div>
-      <div style="color:#e2e8f0;">3. 🔄 <strong>Review PR #12</strong> (~30分鐘)</div>
-      <br>
-      <div style="color:#94a3b8;">⏱ Top 3 預估合計：2小時15分</div>
-      <br>
-      <div style="color:#6b7280;">從哪一件開始？回覆任務編號即可 🚀</div>
-    </div>
-
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- TIPS -->
-  <div class="section">
-    <div class="section-tag">
-      <div class="section-number sn-orange">08</div>
-      <h2>V2 使用小技巧</h2>
-    </div>
-
-    <h3>🏃 先計時再說「做完了」</h3>
-    <p>說「開始做任務 #N」才能啟動自動計時。直接說「做完了」系統只能接受手動分鐘數。一個月後你會看到每類任務的真實時間分佈。</p>
-
-    <h3>🧠 把重要限制說出來</h3>
-    <p>「我每週三下午要接小孩」「這個月預算很緊」「我討厭整理 Excel」——這些說了，秘書就永遠記住，不需要每次提醒。</p>
-
-    <h3>📱 接 Telegram 後不用每天開 Claude</h3>
-    <p>連結 Telegram 之後，早上 8:30 晨間簡報就自動送達你的手機。你只需要在想深入討論任務或捕捉想法時才打開桌面 app。</p>
-
-    <h3>🤖 不用擔心 Agent 任務卡住</h3>
-    <p>交出去的任務系統會監控。超過 30 分鐘沒動靜，下次早間簡報就會告訴你，直接說「重試」或「我自己來」。</p>
-
-  </div>
-
-</div>
-
-<footer>
-  Get To It · v2.0 · 2026<br>
-  為「想法太多、容易分心、但真的想前進」的人設計<br>
-  <span style="color:var(--border2);margin-top:6px;display:block;">Built with Claude · gti.py 2,429 行 · SQLite + numpy · Zero AI Model Downloads</span>
-</footer>
-
-</body>
+    <footer>
+      Get To It · v2.0 · 2026<br />
+      為「想法太多、容易分心、但真的想前進」的人設計<br />
+      <span style="color: var(--border2); margin-top: 6px; display: block"
+        >Built with Claude · gti.py 2,429 行 · SQLite + numpy · Zero AI Model
+        Downloads</span
+      >
+    </footer>
+  </body>
 </html>
