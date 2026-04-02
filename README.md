@@ -1,4 +1,4 @@
-# Get To It ✅
+# Get To It 🐥
 
 **An AI-powered personal secretary for people with too many ideas, too little focus — but the real drive to move forward.**
 
